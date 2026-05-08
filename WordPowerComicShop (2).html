@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Power Comic Book Learning Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--y:#FFE600;--r:#E8133A;--b:#1B4FE8;--dark:#1a1a2e;--pb:#fffdf0;--ink:#1a1a1a;--g:#00A651;--o:#FF6B00;--p:#7B2FBE}
+body{font-family:'Comic Neue',cursive;background:var(--dark);overflow-x:hidden;min-height:100vh;font-size:18px}
+.screen{display:none}.screen.active{display:block}
+
+/* PARENT BANNER — TOP */
+#parentBanner{background:var(--p);border-bottom:5px solid var(--ink);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:200}
+.pb-left h3{font-family:'Bangers',cursive;font-size:22px;color:var(--y);letter-spacing:2px;text-shadow:2px 2px 0 var(--ink)}
+.pb-left p{font-family:'Patrick Hand',cursive;font-size:12px;color:white;line-height:1.4;max-width:500px}
+.pb-toggle{background:var(--y);border:3px solid var(--ink);padding:7px 14px;font-family:'Bangers',cursive;font-size:15px;color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink);white-space:nowrap;letter-spacing:1px;flex-shrink:0}
+.pb-toggle:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+#parentExpanded{background:#2d1a4e;border-bottom:5px solid var(--ink);padding:16px 18px;display:none}
+#parentExpanded.open{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.pe-card{background:white;border:3px solid var(--ink);padding:13px;border-radius:2px}
+.pe-card h4{font-family:'Bangers',cursive;font-size:16px;color:var(--ink);letter-spacing:1px;margin-bottom:7px;border-bottom:3px solid var(--y);padding-bottom:3px}
+.pe-card p,.pe-card li{font-family:'Patrick Hand',cursive;font-size:13px;color:#333;line-height:1.7}
+.pe-card ul{padding-left:16px}
+#ppSession{background:white;border:3px solid var(--ink);padding:13px;border-radius:2px}
+#ppSession h4{font-family:'Bangers',cursive;font-size:16px;color:var(--ink);letter-spacing:1px;margin-bottom:7px;border-bottom:3px solid var(--y);padding-bottom:3px}
+.sr-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-family:'Patrick Hand',cursive;font-size:13px}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;z-index:1000;background:var(--pb);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+.hdots{position:absolute;inset:0;background-image:radial-gradient(circle,#ccc 1px,transparent 1px);background-size:18px 18px;opacity:.35}
+.hborder{position:absolute;inset:12px;border:6px solid var(--ink);pointer-events:none}
+.splash-front{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.s-sign{background:var(--r);border:5px solid var(--ink);padding:10px 40px 6px;margin-bottom:-4px;box-shadow:6px 6px 0 var(--ink)}
+.s-sign h1{font-family:'Bangers',cursive;font-size:56px;color:var(--y);letter-spacing:3px;text-shadow:3px 3px 0 var(--ink);line-height:1}
+.s-sign .sub{font-family:'Bangers',cursive;font-size:22px;color:white;letter-spacing:2px;text-align:center;text-shadow:2px 2px 0 var(--ink)}
+.s-bldg{width:520px;max-width:95vw;background:#4a90d9;border:5px solid var(--ink);border-top:none;box-shadow:8px 8px 0 var(--ink);padding-bottom:20px}
+.awning{width:100%;height:18px;background:repeating-linear-gradient(90deg,var(--y) 0,var(--y) 20px,var(--r) 20px,var(--r) 40px);border-bottom:4px solid var(--ink)}
+.s-wins{display:flex;gap:16px;padding:20px 24px 10px;justify-content:space-around;align-items:flex-end}
+.s-win{flex:1;background:var(--y);border:4px solid var(--ink);min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:8px;position:relative;overflow:hidden}
+.s-win::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:var(--ink);transform:translateY(-50%)}
+.s-win::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:var(--ink);transform:translateX(-50%)}
+.wlbl{font-family:'Bangers',cursive;font-size:14px;color:var(--ink);z-index:1;text-align:center;background:var(--y);padding:2px 4px}
+.s-door{width:80px;height:100px;background:#8B4513;border:4px solid var(--ink);position:relative;display:flex;align-items:flex-start;justify-content:center;padding-top:8px}
+.d-win{width:52px;height:28px;background:#87CEEB;border:3px solid var(--ink)}
+.d-knob{width:10px;height:10px;background:var(--y);border:2px solid var(--ink);border-radius:50%;position:absolute;right:9px;bottom:30px}
+.enter-btn{margin-top:22px;background:var(--y);border:5px solid var(--ink);padding:16px 52px;font-family:'Bangers',cursive;font-size:30px;color:var(--ink);letter-spacing:3px;cursor:pointer;box-shadow:6px 6px 0 var(--ink);transition:all .1s;display:block}
+.enter-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.s-bubble{position:absolute;background:white;border:4px solid var(--ink);border-radius:50px;padding:12px 20px;font-family:'Bangers',cursive;font-size:20px;color:var(--ink);letter-spacing:1px;box-shadow:4px 4px 0 var(--ink);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.s-star{position:absolute;font-family:'Bangers',cursive;color:var(--y);-webkit-text-stroke:2px var(--ink);animation:spin 5s linear infinite;pointer-events:none}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* HERO PICKER */
+#heroPicker{min-height:100vh;background:var(--dark)}
+.ph{background:var(--b);border-bottom:6px solid var(--ink);padding:20px 24px;text-align:center}
+.ph h2{font-family:'Bangers',cursive;font-size:40px;color:var(--y);text-shadow:3px 3px 0 var(--ink);letter-spacing:2px}
+.ph p{font-family:'Patrick Hand',cursive;font-size:16px;color:white;margin-top:6px}
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:16px;padding:26px 22px;max-width:1200px;margin:0 auto}
+.hero-card{background:var(--pb);border:5px solid var(--ink);cursor:pointer;box-shadow:7px 7px 0 var(--ink);transition:all .12s;text-align:center;padding:18px 12px 14px}
+.hero-card:hover{transform:translate(-3px,-3px) rotate(-1deg);box-shadow:10px 10px 0 var(--ink)}
+.hero-card.selected{border-color:var(--g);box-shadow:7px 7px 0 var(--g);background:#e8ffe8}
+.he{font-size:52px;display:block;margin-bottom:8px}
+.hn{font-family:'Bangers',cursive;font-size:18px;color:var(--ink);letter-spacing:1px;margin-bottom:4px}
+.hd{font-family:'Patrick Hand',cursive;font-size:13px;color:#555}
+.hpow{font-family:'Bangers',cursive;font-size:13px;color:var(--p);margin-top:6px}
+.pick-btn{display:block;margin:0 auto 32px;background:var(--y);border:5px solid var(--ink);padding:15px 48px;font-family:'Bangers',cursive;font-size:26px;color:var(--ink);cursor:pointer;box-shadow:6px 6px 0 var(--ink);letter-spacing:2px;transition:all .1s}
+.pick-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.pick-btn:disabled{opacity:.4;cursor:default;transform:none}
+
+/* STORE */
+#store{min-height:100vh;background:var(--dark)}
+.sth{background:var(--r);border-bottom:6px solid var(--ink);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sth h2{font-family:'Bangers',cursive;font-size:28px;color:var(--y);text-shadow:3px 3px 0 var(--ink);letter-spacing:2px;white-space:nowrap}
+.sth-right{display:flex;align-items:center;gap:10px}
+.chg-hero-btn{background:var(--y);border:3px solid var(--ink);padding:7px 13px;font-family:'Bangers',cursive;font-size:14px;color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink);letter-spacing:1px;white-space:nowrap}
+.chg-hero-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.hbb{display:flex;flex-direction:column;align-items:center}
+.hbi{font-size:28px}
+.hbn{font-family:'Bangers',cursive;font-size:11px;color:white;letter-spacing:.5px}
+.mw{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.mascot{font-size:32px;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hbub{background:white;border:3px solid var(--ink);border-radius:40px 40px 40px 6px;padding:8px 13px;font-family:'Patrick Hand',cursive;font-size:13px;color:var(--ink);max-width:200px;line-height:1.4}
+.comics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;padding:22px 18px;max-width:1200px;margin:0 auto}
+.cb{background:var(--pb);border:5px solid var(--ink);cursor:pointer;box-shadow:8px 8px 0 var(--ink);transition:all .12s;position:relative;overflow:hidden}
+.cb:hover{transform:translate(-4px,-4px) rotate(-1deg);box-shadow:12px 12px 0 var(--ink)}
+.cb:focus{outline:4px solid var(--y)}
+.cc{height:215px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;position:relative;overflow:hidden}
+.cdots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.18) 1px,transparent 1px);background-size:14px 14px}
+.cttl{font-family:'Bangers',cursive;font-size:19px;color:white;text-shadow:2px 2px 0 var(--ink);text-align:center;letter-spacing:1px;line-height:1.2;z-index:2}
+.cico{font-size:56px;z-index:2;margin-bottom:7px}
+.cbadge{position:absolute;top:8px;right:8px;background:var(--y);border:3px solid var(--ink);border-radius:50%;width:48px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:9px;color:var(--ink);text-align:center;line-height:1.2;z-index:3}
+.cnum{position:absolute;top:8px;left:8px;background:black;color:white;font-family:'Bangers',cursive;font-size:11px;padding:2px 6px;z-index:3}
+.dstamp{position:absolute;bottom:8px;right:8px;background:var(--g);border:3px solid var(--ink);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:4}
+.cinfo{padding:11px 13px 13px;border-top:4px solid var(--ink);background:white}
+.cinfo h3{font-family:'Bangers',cursive;font-size:16px;color:var(--ink);letter-spacing:1px;margin-bottom:3px}
+.cinfo p{font-size:12px;color:#555;font-family:'Patrick Hand',cursive;line-height:1.4}
+.stags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.stag{font-size:10px;padding:2px 6px;border:2px solid var(--ink);border-radius:3px;font-family:'Comic Neue',cursive;font-weight:700;text-transform:uppercase}
+
+/* LESSON */
+#lesson{min-height:100vh;background:var(--pb)}
+.lh{background:var(--b);border-bottom:6px solid var(--ink);padding:11px 18px;display:flex;align-items:center;gap:12px}
+.bbtn{background:var(--y);border:4px solid var(--ink);padding:8px 14px;font-family:'Bangers',cursive;font-size:16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);color:var(--ink);letter-spacing:1px;transition:all .1s;white-space:nowrap}
+.bbtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.ltit{font-family:'Bangers',cursive;font-size:24px;color:var(--y);text-shadow:2px 2px 0 var(--ink);letter-spacing:2px;flex:1}
+.lhico{font-size:28px}
+.lc{max-width:1200px;margin:0 auto;padding:20px 16px}
+
+/* PROGRESS */
+.prog-wrap{background:#ddd;border:3px solid var(--ink);height:28px;margin-bottom:14px;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--g),#00D68F);transition:width .6s}
+.prog-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:14px;color:var(--ink);letter-spacing:1px}
+.stars-row{display:flex;gap:5px;margin-bottom:14px}
+.sp{font-size:22px;transition:all .3s;filter:grayscale(1) opacity(.3)}
+.sp.lit{filter:none;animation:spop .4s ease}
+@keyframes spop{0%{transform:scale(1)}50%{transform:scale(1.6)}100%{transform:scale(1)}}
+
+/* SKILL TRACKER */
+.sk-track{background:white;border:4px solid var(--ink);padding:12px 14px;margin-bottom:14px;box-shadow:4px 4px 0 var(--ink)}
+.sk-track h4{font-family:'Bangers',cursive;font-size:15px;letter-spacing:1px;color:var(--ink);margin-bottom:7px}
+.sk-pills{display:flex;flex-wrap:wrap;gap:6px}
+.sk-pill{font-size:11px;padding:3px 8px;border:2px solid var(--ink);border-radius:4px;font-family:'Comic Neue',cursive;font-weight:700;background:#f5f5f5;color:#555}
+.sk-pill.on{background:var(--y);color:var(--ink)}
+
+/* PANELS */
+.pg{display:grid;gap:0;border:5px solid var(--ink);background:var(--ink);margin-bottom:20px}
+.pg.c1{grid-template-columns:1fr}
+.pg.c2{grid-template-columns:1fr 1fr}
+.pg.c3{grid-template-columns:1fr 1fr 1fr}
+.panel{background:var(--pb);padding:14px;position:relative;min-height:130px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.pdots{position:absolute;inset:0;background-image:radial-gradient(circle,#ddd 1px,transparent 1px);background-size:14px 14px;opacity:.5}
+.pface{font-size:46px;z-index:2;position:relative;display:inline-block}
+.pmood{position:absolute;bottom:-4px;right:-4px;font-size:16px;z-index:3}
+.narr{background:var(--y);border:3px solid var(--ink);padding:6px 10px;font-family:'Comic Neue',cursive;font-weight:700;font-size:13px;color:var(--ink);z-index:2;width:100%;text-align:left}
+.narr-label{font-size:9px;letter-spacing:.5px;opacity:.7;display:block;margin-bottom:1px}
+.speech{background:white;border:3px solid var(--ink);border-radius:16px;padding:11px 14px;font-family:'Patrick Hand',cursive;font-size:16px;color:var(--ink);z-index:2;max-width:92%;text-align:center;line-height:1.6;box-shadow:3px 3px 0 var(--ink);position:relative}
+.speech::after{content:'';position:absolute;bottom:-14px;left:20px;border:7px solid transparent;border-top:14px solid var(--ink)}
+.speech::before{content:'';position:absolute;bottom:-10px;left:22px;border:6px solid transparent;border-top:11px solid white;z-index:1}
+.speech-label{font-size:9px;font-family:'Comic Neue',cursive;font-weight:700;color:#888;text-align:left;width:100%;max-width:92%;z-index:2;margin-bottom:-4px}
+.thought{background:#f0f8ff;border:3px dashed var(--b);border-radius:16px;padding:11px 14px;font-family:'Patrick Hand',cursive;font-size:15px;color:var(--ink);z-index:2;max-width:92%;text-align:center;line-height:1.6;font-style:italic}
+.thought-label{font-size:9px;font-family:'Comic Neue',cursive;font-weight:700;color:var(--b);text-align:left;width:100%;max-width:92%;z-index:2;margin-bottom:-4px}
+.sfx{font-family:'Bangers',cursive;font-size:38px;color:var(--r);-webkit-text-stroke:2px var(--ink);transform:rotate(-8deg);z-index:2;cursor:pointer;user-select:none}
+.sfx:active{transform:rotate(-8deg) scale(.9)}
+
+/* SYLLABLE DEMO — N-th chunk shows EXACTLY N clapping hands */
+.syl-demo{background:white;border:4px solid var(--ink);padding:14px;margin:12px 0;box-shadow:5px 5px 0 var(--ink)}
+.syl-demo h4{font-family:'Bangers',cursive;font-size:16px;letter-spacing:1px;color:var(--ink);margin-bottom:11px}
+.syl-row{display:flex;align-items:flex-end;gap:0;margin-bottom:8px;flex-wrap:wrap}
+.syl-chunk{display:inline-flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 11px;border-radius:6px;transition:background .12s;border:3px solid transparent;min-width:56px}
+.syl-chunk:hover{background:#fff5b0;border-color:var(--ink)}
+.syl-chunk.playing{background:var(--y);border-color:var(--ink)}
+.syl-letter{font-family:'Bangers',cursive;font-size:28px;color:var(--b);letter-spacing:1px;border-bottom:4px solid var(--ink);padding-bottom:2px;white-space:nowrap}
+/* hands container — flexes to hold N hand emojis */
+.syl-hands{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;margin-top:3px;min-height:24px;font-size:20px;line-height:1}
+.syl-chunk.clap .syl-hands{animation:clapA .38s ease}
+@keyframes clapA{0%{transform:scale(1)}35%{transform:scale(1.7) rotate(10deg)}65%{transform:scale(.88)}100%{transform:scale(1)}}
+.syl-num{font-size:10px;font-family:'Bangers',cursive;color:var(--p);letter-spacing:.5px;margin-top:1px}
+.syl-sep{font-family:'Bangers',cursive;font-size:18px;color:#bbb;padding:0 3px;margin-bottom:14px;align-self:flex-end}
+.syl-caption{font-family:'Patrick Hand',cursive;font-size:12px;color:#666;margin-top:-4px;margin-bottom:10px}
+
+/* YELLOW SOUND WORDS */
+.yw{background:var(--y);padding:2px 8px;border:2px solid var(--ink);border-radius:4px;font-weight:700;cursor:pointer;user-select:none;display:inline-block;transition:all .1s;font-size:inherit}
+.yw:hover{transform:scale(1.07);box-shadow:2px 2px 0 var(--ink)}
+.yw.speaking{background:#fff3cc;outline:3px solid var(--o);animation:ywp .5s ease infinite alternate}
+@keyframes ywp{from{outline-width:3px}to{outline-width:6px}}
+
+.hlb{background:#c8dbff;padding:1px 6px;border:2px solid var(--b);border-radius:3px;font-weight:700}
+.hlr{background:#ffc8c8;padding:1px 6px;border:2px solid var(--r);border-radius:3px;font-weight:700}
+.hlg{background:#c8f0c8;padding:1px 6px;border:2px solid var(--g);border-radius:3px;font-weight:700}
+
+/* TIP */
+.tip{background:var(--y);border:4px solid var(--ink);padding:13px 16px;margin:12px 0;box-shadow:5px 5px 0 var(--ink);display:flex;gap:10px;align-items:flex-start}
+.tip-ico{font-size:26px;flex-shrink:0;margin-top:2px}
+.tip-txt{font-family:'Patrick Hand',cursive;font-size:15px;color:var(--ink);line-height:1.7}
+.tip-txt strong{font-family:'Bangers',cursive;font-size:17px;letter-spacing:1px;display:block;margin-bottom:2px}
+.sdiv{font-family:'Bangers',cursive;font-size:21px;color:white;background:var(--r);border:4px solid var(--ink);padding:8px 18px;margin:20px 0 12px;letter-spacing:2px;box-shadow:4px 4px 0 var(--ink);display:inline-block}
+
+/* QUESTIONS — bigger text */
+.qs{background:white;border:5px solid var(--ink);padding:18px;margin-bottom:16px;box-shadow:6px 6px 0 var(--ink);position:relative}
+.qlbl{font-family:'Bangers',cursive;font-size:13px;color:white;background:var(--p);padding:4px 10px;position:absolute;top:-13px;left:14px;border:3px solid var(--ink);letter-spacing:1px}
+.stag2{display:inline-block;background:var(--b);color:white;font-size:11px;font-family:'Comic Neue',cursive;font-weight:700;padding:2px 7px;border:2px solid var(--ink);margin-bottom:9px}
+.qt{font-family:'Comic Neue',cursive;font-weight:700;font-size:17px;color:var(--ink);margin-bottom:13px;line-height:1.6;padding-top:4px}
+.qt small{display:block;font-size:13px;color:#555;font-family:'Patrick Hand',cursive;font-weight:400;margin-top:5px;padding:6px 10px;background:#f8f8f0;border-left:4px solid var(--y);line-height:1.5}
+.choices{display:flex;flex-direction:column;gap:8px}
+.ch-btn{background:var(--pb);border:3px solid var(--ink);padding:11px 15px;font-family:'Patrick Hand',cursive;font-size:16px;color:var(--ink);cursor:pointer;text-align:left;transition:all .1s;display:flex;align-items:center;gap:10px;box-shadow:3px 3px 0 var(--ink)}
+.ch-btn:hover{background:#fff5b0;transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.ch-btn:disabled{cursor:default;transform:none}
+.ch-btn.correct{background:#ccf5cc;border-color:var(--g)}
+.ch-btn.wrong{background:#ffd5d5;border-color:var(--r)}
+.ch-l{background:var(--ink);color:var(--y);font-family:'Bangers',cursive;font-size:15px;width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fb{margin-top:11px;padding:12px 14px;border:3px solid var(--ink);font-family:'Patrick Hand',cursive;font-size:15px;line-height:1.6;display:none}
+.fb.show{display:block}
+.fb.ok{background:#e6f9e6;border-color:var(--g)}
+.fb.no{background:#ffeaea;border-color:var(--r)}
+
+/* HFW grid */
+.hfw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin:10px 0}
+.hfw{background:white;border:3px solid var(--ink);padding:8px 4px;font-family:'Bangers',cursive;font-size:24px;color:var(--b);text-align:center;box-shadow:3px 3px 0 var(--ink);cursor:pointer;transition:all .1s}
+.hfw:hover{background:var(--y);transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.hfw.spk{background:var(--o);color:white}
+
+/* ARTICLE */
+.artbox{background:white;border:5px solid var(--ink);padding:18px;margin:12px 0;box-shadow:6px 6px 0 var(--ink)}
+.arth{background:var(--b);color:white;font-family:'Bangers',cursive;font-size:22px;letter-spacing:2px;padding:9px 14px;border:3px solid var(--ink);margin-bottom:12px}
+.arts{font-family:'Bangers',cursive;font-size:15px;color:var(--r);letter-spacing:1px;margin-bottom:6px;border-bottom:3px solid var(--ink);padding-bottom:3px}
+.artb{font-family:'Patrick Hand',cursive;font-size:15px;line-height:1.9;margin-bottom:11px;color:#222}
+.artc{background:#fffbe6;border:3px solid var(--ink);padding:9px 13px;font-family:'Patrick Hand',cursive;font-size:13px;font-style:italic;color:#555;margin-bottom:11px}
+
+/* COMPLETE */
+.cbanner{display:none;background:var(--g);border:5px solid var(--ink);padding:20px;text-align:center;box-shadow:8px 8px 0 var(--ink);margin-top:20px}
+.cbanner.show{display:block}
+.cbanner h2{font-family:'Bangers',cursive;font-size:44px;color:var(--y);text-shadow:3px 3px 0 var(--ink);letter-spacing:3px;margin-bottom:9px}
+.cbanner p{font-family:'Patrick Hand',cursive;font-size:17px;color:var(--ink);margin-bottom:14px;line-height:1.6}
+.srpt{background:white;border:4px solid var(--ink);padding:14px;margin:12px 0;text-align:left}
+.srpt h4{font-family:'Bangers',cursive;font-size:17px;color:var(--ink);letter-spacing:1px;margin-bottom:8px}
+.rbtn{background:var(--y);border:4px solid var(--ink);padding:11px 28px;font-family:'Bangers',cursive;font-size:22px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);letter-spacing:2px;transition:all .1s;margin:4px}
+.rbtn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.rbtn.sec{background:white}
+
+@media(max-width:640px){
+  .pg.c2,.pg.c3{grid-template-columns:1fr}
+  .ltit{font-size:17px}
+  .s-sign h1{font-size:38px}
+  .s-bubble{display:none}
+  #parentExpanded.open{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PARENT BANNER — ALWAYS AT TOP -->
+<div id="parentBanner">
+  <div class="pb-left">
+    <h3>PARENT &amp; TEACHER GUIDE</h3>
+    <p>Tap "SHOW TIPS" for directions, reading strategies, and your child's progress report.
+    <span style="display:inline-block;margin-top:4px;background:#fff3cd;color:#333;padding:3px 8px;border-radius:3px;font-weight:700;font-size:12px;border:2px solid #e6a817">
+    SOUND NOTE: Audio may take a few seconds to start on some browsers. Click once and wait patiently — the sound IS there!</span></p>
+  </div>
+  <button class="pb-toggle" onclick="toggleParent()">SHOW TIPS ▼</button>
+</div>
+<div id="parentExpanded">
+  <div id="ppSession">
+    <h4>SESSION REPORT</h4>
+    <p style="font-family:'Patrick Hand',cursive;font-size:13px;color:#555">Complete a comic book to see results here!</p>
+  </div>
+  <div class="pe-card">
+    <h4>HOW TO USE THIS SITE</h4>
+    <ul>
+      <li>Your child picks a <strong>reading hero</strong> first, then chooses a comic book from the store.</li>
+      <li>Each comic has a short story followed by questions. Let your child try every question on their own first.</li>
+      <li>Yellow highlighted words can be clicked to hear the sounds — one at a time, never overlapping.</li>
+      <li>The syllable clapping demo shows each word part with one clapping hand. At the end of each row, a yellow box shows the total syllable count — for example: LI + ON = 2 SYLLABLES.</li>
+      <li>If your child gets stuck, encourage them to re-read the story before answering.</li>
+    </ul>
+    <div style="margin-top:10px;padding:10px;background:#fff3cd;border:2px solid #e6a817;border-radius:3px;font-family:'Patrick Hand',cursive;font-size:13px;color:#5c3d00;line-height:1.6">
+      <strong>IMPORTANT — AUDIO NOTE FOR PARENTS:</strong><br>
+      Sound may lag by a few seconds on some browsers (especially Chrome on first use). This is completely normal. Please tell your child: <em>"Click the yellow word once and then wait — the sound will come in just a moment!"</em> Do not click again right away. The audio engine needs a brief moment to start up. If no sound plays after 8 seconds, try clicking the word one more time.
+    </div>
+  </div>
+  <div class="pe-card">
+    <h4>HELPING READERS WHO FORGET WHAT THEY READ</h4>
+    <ul>
+      <li><strong>Read one panel at a time.</strong> Cover the other panels with your hand or a piece of paper. Looking at one chunk at a time prevents visual overwhelm.</li>
+      <li><strong>Pause after every panel and ask:</strong> "What just happened?" This builds the habit of checking understanding before moving on.</li>
+      <li><strong>Point to words as you read.</strong> Using a finger or a bookmark as a pointer helps anchor attention and prevents losing place on the page.</li>
+      <li><strong>Re-read without shame.</strong> Normalize going back: "Let's read that one more time together." Re-reading is a skill, not a failure.</li>
+      <li><strong>Tell the story back.</strong> After reading, ask your child to tell you what happened in their own words. If they get stuck, show them the picture panels as memory cues — not the words.</li>
+      <li><strong>Connect to real life.</strong> "That reminds me of when you..." Personal connections make text stick in memory much longer.</li>
+      <li><strong>Keep sessions short.</strong> 10–15 minutes of focused reading is more effective than a long session for children who struggle with sustained attention.</li>
+      <li><strong>Celebrate effort, not just answers.</strong> "I love how hard you thought about that!" matters more than whether the answer was correct.</li>
+      <li><strong>Use the speech bubbles.</strong> When a child forgets what they read, point back to the speech bubble and say: "Let's see what the character said right here." The visual structure of comics supports working memory.</li>
+    </ul>
+  </div>
+  <div class="pe-card">
+    <h4>ASK YOUR CHILD</h4>
+    <ul>
+      <li>"What happened to the hero in the story?"</li>
+      <li>"Can you find a word that rhymes with cat?"</li>
+      <li>"Clap the syllables in your own name for me!"</li>
+      <li>"Why did that happen in the story?"</li>
+      <li>"How do you think the character was feeling?"</li>
+      <li>"What is the most important idea in the story?"</li>
+      <li>"Can you spot a sight word on this page right now?"</li>
+    </ul>
+  </div>
+  <div class="pe-card">
+    <h4>AT-HOME STRATEGIES</h4>
+    <ul>
+      <li>Read each panel slowly together — pause and describe what you see in the picture.</li>
+      <li>Cover the words and ask: "What do you think is happening here?"</li>
+      <li>Clap syllables in everyday words at meals, on car rides, or during daily routines.</li>
+      <li>Point out sight words on cereal boxes, road signs, and store labels.</li>
+      <li>Ask "why did that happen?" about everyday events — cause and effect in real life!</li>
+      <li>Face emojis in the panels show feelings. Ask your child: "What is this character feeling, and how do you know?"</li>
+      <li>Speech bubbles show what characters SAY. Thought bubbles show what they THINK. Discuss the difference!</li>
+    </ul>
+  </div>
+  <div class="pe-card">
+    <h4>ABOUT THIS PROGRAM</h4>
+    <p>All activities align to Georgia ELA standards (ELAGSEKRF2.a-e, RF4, ELAGSE2RI1-6). The site uses multi-sensory, low-distraction design: one sound at a time, consistent panel layouts, visual progress, movement-based syllable clapping, and click-to-hear audio. Hero choice and story path choice support autonomy and motivation for all learners.</p>
+    <div style="margin-top:12px;padding:10px;background:#1a1a2e;border-radius:3px;border:2px solid #FFE600;text-align:center">
+      <div style="font-family:'Bangers',cursive;font-size:17px;color:#FFE600;letter-spacing:2px;text-shadow:1px 1px 0 #000;margin-bottom:4px">WORD POWER COMIC BOOK LEARNING SHOP</div>
+      <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:white;line-height:1.8">
+        Conceptualized &amp; Designed by <strong style="color:#FFE600">Kortisha Y. Baker</strong><br>
+        &copy; <span id="cpYear"></span> Kortisha Y. Baker. All Rights Reserved.<br>
+        <span style="font-size:11px;opacity:.85">This educational program and all of its content, characters, stories, and lesson designs are the intellectual property of Kortisha Y. Baker and are protected under applicable copyright law. Unauthorized reproduction, redistribution, or commercial use of any part of this program without express written permission is strictly prohibited. This program is licensed for personal and classroom educational use only.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPLASH -->
+<div id="splash" onclick="enterPicker()" tabindex="0" role="button" aria-label="Click to enter">
+  <div class="hdots"></div><div class="hborder"></div>
+  <div class="s-star" style="top:8%;left:5%;font-size:24px">★</div>
+  <div class="s-star" style="top:10%;right:9%;font-size:36px;animation-duration:3s;animation-direction:reverse">★</div>
+  <div class="s-star" style="bottom:17%;left:6%;font-size:20px;animation-duration:6s">✦</div>
+  <div class="s-star" style="bottom:13%;right:5%;font-size:28px;animation-duration:4s;animation-direction:reverse">★</div>
+  <div class="s-bubble" style="top:48px;right:48px">READ! LEARN! GROW!</div>
+  <div class="s-bubble" style="bottom:65px;left:32px;font-size:16px">Every reader is a SUPERHERO!</div>
+  <div class="splash-front">
+    <div class="s-sign"><h1>WORD POWER</h1><div class="sub">COMIC BOOK LEARNING SHOP</div></div>
+    <div class="s-bldg">
+      <div class="awning"></div>
+      <div class="s-wins">
+        <div class="s-win"><span class="wlbl" style="z-index:2">PHONICS<br>INSIDE!</span></div>
+        <div class="s-door"><div class="d-win"></div><div class="d-knob"></div></div>
+        <div class="s-win"><span class="wlbl" style="z-index:2">READING<br>FUN!</span></div>
+      </div>
+    </div>
+    <button class="enter-btn">CLICK TO ENTER!</button>
+  </div>
+  <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Patrick Hand',cursive;font-size:12px;color:#888;z-index:3;letter-spacing:.5px">
+    Conceptualized &amp; Designed by <strong>Kortisha Y. Baker</strong> &nbsp;|&nbsp; &copy; <span class="cpYr"></span> All Rights Reserved &nbsp;|&nbsp; Licensed for Educational Use
+  </div>
+</div>
+
+<!-- HERO PICKER -->
+<div id="heroPicker" class="screen">
+  <div class="ph"><h2>PICK YOUR READING HERO!</h2><p>Choose the hero who will join you on your reading adventure today!</p></div>
+  <div class="hero-grid">
+    <div class="hero-card" onclick="pickHero(this,'Leo the Lion','Leo',['Finds Rhymes!'])" tabindex="0">
+      <span class="he">🦁</span><div class="hn">LEO</div><div class="hd">The Lion</div><div class="hpow">Finds Rhymes!</div>
+    </div>
+    <div class="hero-card" onclick="pickHero(this,'Captain Sight','Captain',['Sight Words!'])" tabindex="0">
+      <span class="he">🦸</span><div class="hn">CAPTAIN SIGHT</div><div class="hd">Word Hero</div><div class="hpow">Sight Words!</div>
+    </div>
+    <div class="hero-card" onclick="pickHero(this,'Ollie the Owl','Ollie',['Counts Syllables!'])" tabindex="0">
+      <span class="he">🦉</span><div class="hn">OLLIE</div><div class="hd">The Owl</div><div class="hpow">Counts Syllables!</div>
+    </div>
+    <div class="hero-card" onclick="pickHero(this,'Max the Robot','Max',['Builds Words!'])" tabindex="0">
+      <span class="he">🤖</span><div class="hn">MAX</div><div class="hd">The Robot</div><div class="hpow">Builds Words!</div>
+    </div>
+    <div class="hero-card" onclick="pickHero(this,'Detective Maya','Maya',['Finds Clues!'])" tabindex="0">
+      <span class="he">🔍</span><div class="hn">MAYA</div><div class="hd">The Detective</div><div class="hpow">Finds Clues!</div>
+    </div>
+    <div class="hero-card" onclick="pickHero(this,'Sparky','Sparky',['Cause and Effect!'])" tabindex="0">
+      <span class="he">⚡</span><div class="hn">SPARKY</div><div class="hd">The Flash</div><div class="hpow">Cause and Effect!</div>
+    </div>
+  </div>
+  <button class="pick-btn" id="pickBtn" onclick="openStore()" disabled>ENTER THE STORE!</button>
+</div>
+
+<!-- STORE -->
+<div id="store" class="screen">
+  <div class="sth">
+    <h2>WORD POWER SHOP</h2>
+    <div class="mw">
+      <div class="mascot" id="stIco">🦉</div>
+      <div class="hbub" id="stMsg">Pick a comic book to start!</div>
+    </div>
+    <div class="sth-right">
+      <button class="chg-hero-btn" onclick="changeHero()">CHANGE HERO</button>
+      <div class="hbb"><div class="hbi" id="stBadge">🦉</div><div class="hbn" id="stName">YOUR HERO</div></div>
+    </div>
+  </div>
+  <div class="comics-grid" id="comicsGrid"></div>
+</div>
+
+<!-- LESSON -->
+<div id="lesson" class="screen">
+  <div class="lh">
+    <button class="bbtn" onclick="goBack()">BACK TO STORE</button>
+    <div class="ltit" id="lTitle">LESSON</div>
+    <div class="lhico" id="lHero">🦉</div>
+  </div>
+  <div class="lc" id="lContent"></div>
+</div>
+
+<script>
+// STATE
+var HERO={name:'',short:'',powers:[]};
+var answered={},correctCount=0,totalQ=0,isSpeaking=false,curId=null;
+var completed={};
+try{completed=JSON.parse(localStorage.getItem('wpc')||'{}')}catch(e){}
+
+// ── SPEECH ENGINE — FAST, NO DELAY ──
+// Chrome needs a user gesture before TTS works.
+// We warm up the engine on the very first click so subsequent calls are instant.
+var speechReady=false;
+function warmSpeech(){
+  if(speechReady||!('speechSynthesis' in window))return;
+  speechReady=true;
+  // Speak a zero-length utterance to initialize the engine
+  var w=new SpeechSynthesisUtterance(' ');
+  w.volume=0;w.rate=10;
+  speechSynthesis.speak(w);
+}
+// Warm up immediately on first ANY interaction
+document.addEventListener('click',warmSpeech,{once:true});
+document.addEventListener('touchstart',warmSpeech,{once:true});
+document.addEventListener('keydown',warmSpeech,{once:true});
+
+// Safety lock reset — never leave isSpeaking stuck
+var _safetyT=null;
+function _armSafety(){
+  clearTimeout(_safetyT);
+  _safetyT=setTimeout(function(){isSpeaking=false;},7000);
+}
+
+// Core speak function — NO setTimeout delay, fires immediately
+function doSpeak(text,el,cb){
+  warmSpeech();
+  // Cancel any pending speech right away
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+  // Brief yield to let cancel settle, then speak
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      isSpeaking=true;
+      _armSafety();
+      if(el)el.classList.add('speaking');
+      if(speechSynthesis.paused)speechSynthesis.resume();
+      var u=new SpeechSynthesisUtterance(text);
+      u.rate=0.85;u.pitch=1.0;u.volume=1;
+      u.onend=function(){
+        isSpeaking=false;clearTimeout(_safetyT);
+        if(el)el.classList.remove('speaking');
+        if(cb)cb();
+      };
+      u.onerror=function(){
+        isSpeaking=false;clearTimeout(_safetyT);
+        if(el)el.classList.remove('speaking');
+        if(cb)cb();
+      };
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// Play word — or phoneme sequence if sounds[] provided
+function speakWord(text,el,sounds){
+  warmSpeech();
+  if(sounds&&sounds.length){
+    _stopAll();
+    _playSeq(sounds,0,el);
+  } else {
+    doSpeak(text,el,null);
+  }
+}
+function _stopAll(){
+  isSpeaking=false;clearTimeout(_safetyT);
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+}
+function _playSeq(arr,idx,el){
+  if(idx>=arr.length){isSpeaking=false;clearTimeout(_safetyT);if(el)el.classList.remove('speaking');return;}
+  warmSpeech();
+  isSpeaking=true;_armSafety();
+  if(el)el.classList.add('speaking');
+  if(speechSynthesis.paused)speechSynthesis.resume();
+  var u=new SpeechSynthesisUtterance(arr[idx]);
+  u.rate=0.7;u.pitch=1.0;u.volume=1;
+  u.onend=function(){setTimeout(function(){_playSeq(arr,idx+1,el);},360);};
+  u.onerror=function(){isSpeaking=false;clearTimeout(_safetyT);if(el)el.classList.remove('speaking');};
+  speechSynthesis.speak(u);
+}
+
+// Syllable clap
+function clapSyl(chunk,el){
+  _stopAll();
+  el.classList.add('clap','playing');
+  doSpeak(chunk,null,function(){
+    setTimeout(function(){el.classList.remove('clap','playing');},250);
+  });
+}
+// Sound effect word
+function playSfx(text,el){
+  _stopAll();
+  if(el)el.style.transform='rotate(-8deg) scale(1.25)';
+  doSpeak(text,null,function(){if(el)el.style.transform='rotate(-8deg) scale(1)';});
+}
+// High-frequency word click
+function clickHFW(word,el){
+  _stopAll();
+  if(el)el.classList.add('spk');
+  doSpeak(word,null,function(){if(el)el.classList.remove('spk');});
+}
+
+// SYLLABLE ROW — every chunk shows exactly 1 hand (one clap per beat).
+// After all chunks, an equals sign shows the total syllable count clearly.
+// Example: LI [👏] · ON [👏] = 2 syllables
+function sylRow(syls,caption){
+  var html='<div class="syl-row" style="align-items:center;flex-wrap:wrap">';
+  syls.forEach(function(s,i){
+    html+='<div class="syl-chunk" onclick="clapSyl(\''+s+'\',this)" title="Click to hear this part!">'
+         +'<div class="syl-letter">'+s+'</div>'
+         +'<div class="syl-hands"><span style="font-size:22px;line-height:1">&#x1F44F;</span></div>'
+         +'</div>';
+    // separator dot between chunks, but NOT after the last chunk
+    if(i<syls.length-1){
+      html+='<div class="syl-sep" style="font-size:22px;padding:0 4px;margin-bottom:0;color:#aaa;align-self:center">+</div>';
+    }
+  });
+  // equals sign + total count — makes the answer crystal clear
+  html+='<div style="display:flex;align-items:center;gap:6px;margin-left:8px">'
+       +'<span style="font-family:\'Bangers\',cursive;font-size:26px;color:#1a1a2e">=</span>'
+       +'<span style="font-family:\'Bangers\',cursive;font-size:20px;background:#FFE600;border:3px solid #1a1a1a;padding:2px 10px;color:#1a1a1a;box-shadow:2px 2px 0 #1a1a1a">'
+       +syls.length+' SYLLABLE'+(syls.length>1?'S':'')
+       +'</span>'
+       +'</div>';
+  html+='</div>';
+  if(caption)html+='<div class="syl-caption" style="margin-top:4px">'+caption+'</div>';
+  return html;
+}
+
+// QUESTION ENGINE
+function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+function mkQ(qid,opts,cor,okm,nom){
+  var L=['A','B','C','D'];
+  return opts.map(function(o,i){
+    return '<button class="ch-btn" id="'+qid+'-o'+i+'" onclick="checkAns(\''+qid+'\','+i+','+cor+',\''+esc(okm)+'\',\''+esc(nom)+'\')"><span class="ch-l">'+L[i]+'</span> '+o+'</button>';
+  }).join('');
+}
+function checkAns(qid,chosen,correct,okm,nom){
+  if(answered[qid])return;
+  answered[qid]=true;
+  var fb=document.getElementById(qid+'-fb');
+  document.querySelectorAll('[id^="'+qid+'-o"]').forEach(function(b){b.disabled=true;});
+  document.getElementById(qid+'-o'+chosen).classList.add(chosen===correct?'correct':'wrong');
+  if(chosen!==correct)document.getElementById(qid+'-o'+correct).classList.add('correct');
+  var ok=chosen===correct;
+  fb.textContent=ok?okm:nom;
+  fb.className='fb show '+(ok?'ok':'no');
+  if(ok){
+    correctCount++;updateProg();updateStars();
+    var praise=['Great job!','You got it!','Excellent!','Amazing work!','Wonderful!','You did it!'];
+    setTimeout(function(){doSpeak(praise[Math.floor(Math.random()*praise.length)],null,null);},200);
+  }
+  // Push live progress to parent panel after every single answer
+  updateLiveProgress(qid,ok);
+  checkComplete();
+}
+
+function updateLiveProgress(qid,correct){
+  var title=document.getElementById('lTitle')?document.getElementById('lTitle').textContent:'';
+  var allQ=document.querySelectorAll('.qs');
+  var rows='';
+  allQ.forEach(function(qs){
+    var qNum=qs.id;
+    if(!answered[qNum])return; // only show answered questions
+    var wasOk=document.querySelector('#'+qNum+' .fb.ok');
+    var icon=wasOk?'Correct':'Not yet';
+    var labelEl=qs.querySelector('.qlbl');
+    var label=labelEl?labelEl.textContent:qNum;
+    var stdEl=qs.querySelector('.stag2');
+    var std=stdEl?stdEl.textContent:'';
+    rows+='<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;padding:6px 8px;background:'+(wasOk?'#e8f9e8':'#fff0f0')+';border:2px solid '+(wasOk?'#00A651':'#E8133A')+';border-radius:2px">'
+      +'<span style="font-size:16px;flex-shrink:0">'+(wasOk?'✅':'❌')+'</span>'
+      +'<div style="font-family:\'Patrick Hand\',cursive;font-size:12px;color:#333;line-height:1.5">'
+      +'<strong>'+label+'</strong> — '+icon+'<br>'
+      +'<span style="font-size:11px;color:#666">'+std+'</span>'
+      +'</div>'
+      +'</div>';
+  });
+  var total=allQ.length;
+  var pct=total>0?Math.round(correctCount/total*100):0;
+  var html='<h4>LIVE PROGRESS — '+title+'</h4>'
+    +'<div style="background:#ddd;border:2px solid #1a1a1a;height:18px;margin-bottom:10px;position:relative">'
+    +'<div style="height:100%;width:'+pct+'%;background:#00A651;transition:width .5s"></div>'
+    +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:\'Bangers\',cursive;font-size:12px;color:#1a1a1a;letter-spacing:1px">'+correctCount+' correct out of '+total+' answered ('+pct+'%)</div>'
+    +'</div>'
+    +rows;
+  if(correctCount>=total&&total>0){
+    html+='<div style="background:#1a1a2e;padding:8px;text-align:center;margin-top:6px">'
+      +'<div style="font-family:\'Bangers\',cursive;font-size:18px;color:#FFE600;letter-spacing:2px">LESSON COMPLETE!</div>'
+      +'<div style="font-family:\'Patrick Hand\',cursive;font-size:12px;color:#ccc;margin-top:4px">Ask your child to tell you one thing they learned from this lesson!</div>'
+      +'</div>';
+  }
+  document.getElementById('ppSession').innerHTML=html;
+}
+function updateProg(){
+  totalQ=document.querySelectorAll('.qs').length;
+  var pct=totalQ>0?Math.round(correctCount/totalQ*100):0;
+  var b=document.getElementById('pFill');if(b)b.style.width=pct+'%';
+}
+function updateStars(){
+  var stars=document.querySelectorAll('.sp');if(!stars.length)return;
+  totalQ=document.querySelectorAll('.qs').length;
+  var per=totalQ/stars.length;
+  stars.forEach(function(s,i){if(correctCount>i*per)s.classList.add('lit');});
+}
+function checkComplete(){
+  totalQ=document.querySelectorAll('.qs').length;
+  if(correctCount>=totalQ&&totalQ>0){
+    var b=document.getElementById('cBanner');
+    if(b){b.classList.add('show');b.scrollIntoView({behavior:'smooth'});}
+    completed[curId]=true;
+    try{localStorage.setItem('wpc',JSON.stringify(completed));}catch(e){}
+    buildSessionReport();
+  }
+}
+function buildSessionReport(){
+  // updateLiveProgress already keeps ppSession current after every question.
+  // On final completion, do one last refresh to show the LESSON COMPLETE banner.
+  updateLiveProgress('',false);
+}
+
+// PARENT BANNER
+function toggleParent(){
+  var panel=document.getElementById('parentExpanded');
+  var btn=document.querySelector('.pb-toggle');
+  if(panel.classList.contains('open')){panel.classList.remove('open');btn.textContent='SHOW TIPS \u25bc';}
+  else{panel.classList.add('open');btn.textContent='HIDE TIPS \u25b2';}
+}
+
+// Fill copyright year
+(function(){
+  var yr=new Date().getFullYear();
+  document.querySelectorAll('.cpYr').forEach(function(el){el.textContent=yr;});
+  var cpEl=document.getElementById('cpYear');
+  if(cpEl)cpEl.textContent=yr;
+})();
+
+// Reusable sound lag notice — inserted at top of every lesson with sounds
+function soundNotice(){
+  return '<div style="background:#fff3cd;border:3px solid #e6a817;padding:12px 15px;margin-bottom:14px;font-family:\'Patrick Hand\',cursive;font-size:14px;color:#5c3d00;line-height:1.7;border-radius:2px">'
+    +'<strong style="font-family:\'Bangers\',cursive;font-size:16px;letter-spacing:1px;color:#b35c00">PARENTS &amp; HELPERS — SOUND NOTE:</strong><br>'
+    +'When your child clicks a yellow word, the sound may take a few seconds to start. This is normal on some browsers. Please remind your child: <em>"Click once, then wait patiently — the sound is coming!"</em> Do not click the word again right away. If no sound plays after about 8 seconds, one more click will do the trick.'
+    +'</div>';
+}
+
+// COMICS DATA
+var COMICS=[
+  {id:'phonics1',num:'#1',title:'THE SOUND ZOO!',icon:'🦁',c1:'#FF6B00',c2:'#FFE600',badge:'RHYME\nTIME!',desc:'Animals teach rhyming words and syllable clapping!',tags:[{t:'RF2.a',bg:'#fff5b0'},{t:'RF2.b',bg:'#fff5b0'},{t:'RF2.c',bg:'#fff5b0'}]},
+  {id:'phonics2',num:'#2',title:'THE WORD FACTORY!',icon:'🏭',c1:'#1B4FE8',c2:'#4FA3FF',badge:'CVC\nWORDS!',desc:'Build words using beginning, middle, and ending sounds!',tags:[{t:'RF2.d',bg:'#c8dbff',tc:'#1B4FE8'},{t:'RF2.e',bg:'#c8dbff',tc:'#1B4FE8'}]},
+  {id:'sightwords',num:'#3',title:'SUPERHERO SIGHT WORDS!',icon:'🦸',c1:'#E8133A',c2:'#FF6B9D',badge:'POWER\nWORDS!',desc:'Learn power words that appear in almost every story!',tags:[{t:'RF4',bg:'#ffd0d0',tc:'#900'}]},
+  {id:'comprehension',num:'#4',title:'MYSTERY AT MOON LAKE!',icon:'🔍',c1:'#00A651',c2:'#00D68F',badge:'WHO\nWHAT\nWHY?',desc:'Answer who, what, where, when, why, and how!',tags:[{t:'RI1',bg:'#c8f0d8',tc:'#004',bc:'#00A651'},{t:'RI2',bg:'#c8f0d8',tc:'#004',bc:'#00A651'}]},
+  {id:'causeeffect',num:'#5',title:'CAUSE & EFFECT SQUAD!',icon:'⚡',c1:'#7B2FBE',c2:'#C84BF0',badge:'CAUSE\n&\nEFFECT',desc:'Discover why things happen and what comes next!',tags:[{t:'RI3',bg:'#e8c8ff',tc:'#400',bc:'#7B2FBE'},{t:'RI6',bg:'#e8c8ff',tc:'#400',bc:'#7B2FBE'}]},
+  {id:'textfeatures',num:'#6',title:'TEXT FEATURE HEROES!',icon:'📰',c1:'#FF6B00',c2:'#E8133A',badge:'TEXT\nPOWERS!',desc:'Find secrets in headings, captions, and bold words!',tags:[{t:'RI4',bg:'#ffe0c8',tc:'#500',bc:'#FF6B00'},{t:'RI5',bg:'#ffe0c8',tc:'#500',bc:'#FF6B00'}]},
+  {id:'reading3',num:'#7',title:'THREE STORY ADVENTURES!',icon:'📖',c1:'#0A7E8C',c2:'#22C9DE',badge:'3\nSTORIES!\nREAD!',desc:'Read three fun stories and answer questions about each one!',tags:[{t:'RI1',bg:'#c8f0f5',tc:'#004',bc:'#0A7E8C'},{t:'RI2',bg:'#c8f0f5',tc:'#004',bc:'#0A7E8C'},{t:'RI3',bg:'#c8f0f5',tc:'#004',bc:'#0A7E8C'}]}
+];
+
+// NAV
+var heroIcons={'Leo the Lion':'🦁','Captain Sight':'🦸','Ollie the Owl':'🦉','Max the Robot':'🤖','Detective Maya':'🔍','Sparky':'⚡'};
+function getHeroIcon(name){return heroIcons[name]||'🦉';}
+function enterPicker(){document.getElementById('splash').style.display='none';showScreen('heroPicker');}
+var _hcard=null;
+function pickHero(card,name,short,powers){
+  if(_hcard)_hcard.classList.remove('selected');
+  card.classList.add('selected');_hcard=card;
+  HERO={name:name,short:short,powers:powers,icon:getHeroIcon(name)};
+  document.getElementById('pickBtn').disabled=false;
+  setTimeout(function(){doSpeak(short+'. Your superpower is '+powers[0],null,null);},100);
+}
+function changeHero(){showScreen('heroPicker');}
+function openStore(){buildStore();showScreen('store');}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById(id);if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
+function buildStore(){
+  var ico=HERO.icon||'🦉';
+  document.getElementById('stIco').textContent=ico;
+  document.getElementById('stBadge').textContent=ico;
+  document.getElementById('stName').textContent=(HERO.short||'HERO').toUpperCase();
+  document.getElementById('stMsg').textContent='Welcome, '+(HERO.short||'Reader')+'! Pick a comic book!';
+  var g=document.getElementById('comicsGrid');g.innerHTML='';
+  COMICS.forEach(function(cd){
+    var done=completed[cd.id];
+    var tags=cd.tags.map(function(t){return '<span class="stag" style="background:'+(t.bg||'#eee')+';color:'+(t.tc||'#333')+';border-color:'+(t.bc||'#333')+'">'+t.t+'</span>';}).join('');
+    var bl=cd.badge.split('\n').join('<br>');
+    g.innerHTML+='<div class="cb" onclick="openLesson(\''+cd.id+'\')" tabindex="0" aria-label="'+cd.title+'">'
+      +'<div class="cc" style="background:linear-gradient(135deg,'+cd.c1+','+cd.c2+')">'
+        +'<div class="cdots"></div><div class="cnum">'+cd.num+'</div>'
+        +'<div class="cbadge">'+bl+'</div>'
+        +(done?'<div class="dstamp">Done!</div>':'')
+        +'<div class="cico">'+cd.icon+'</div>'
+        +'<div class="cttl">'+cd.title+'</div>'
+      +'</div>'
+      +'<div class="cinfo"><h3>'+cd.title+'</h3><p>'+cd.desc+'</p><div class="stags">'+tags+'</div></div>'
+    +'</div>';
+  });
+}
+function openLesson(id){
+  answered={};correctCount=0;curId=id;
+  var L=LESSONS[id];if(!L)return;
+  document.getElementById('lTitle').textContent=L.title;
+  document.getElementById('lHero').textContent=HERO.icon||'🦉';
+  document.getElementById('lContent').innerHTML=L.html();
+  totalQ=document.querySelectorAll('.qs').length;
+  showScreen('lesson');
+}
+function goBack(){speechSynthesis.cancel();isSpeaking=false;buildStore();showScreen('store');}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){var f=document.activeElement;if(f&&f.classList.contains('cb'))f.click();if(f&&f.classList.contains('hero-card'))f.click();}
+});
+
+// ═══════════════════════════════════════════════════
+// LESSONS
+// ═══════════════════════════════════════════════════
+var LESSONS={
+// ─── SOUND ZOO ───
+phonics1:{title:'THE SOUND ZOO!',html:function(){
+var hi=HERO.icon||'🦁',hn=HERO.short||'Reader';
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">YOUR ADVENTURE PROGRESS!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++soundNotice()
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Rhyming Words (RF2.a)</span><span class="sk-pill on">Counting Syllables (RF2.b)</span><span class="sk-pill on">Onset and Rime (RF2.c)</span></div></div>'
++'<div class="tip"><div class="tip-ico">🦉</div><div class="tip-txt"><strong>READING TIP!</strong>Take your time and read slowly. <span class="yw" onclick="speakWord(\'Click yellow words to hear them!\',this,null)">Yellow words</span> can be clicked to hear them — one sound at a time! If the sound does not start right away, wait a few seconds. It is on its way!</div></div>'
++'<div class="pg c2">'
++'<div class="panel"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>THE SOUND ZOO — CHAPTER 1</div><div class="pface">🦁<span class="pmood" title="Leo feels happy">😄</span></div><div class="speech-label">LEO SAYS:</div><div class="speech">Hello! My name is <span class="yw" onclick="speakWord(\'Leo\',this,null)">Leo</span> the Lion. Welcome to the <span class="yw" onclick="speakWord(\'Sound Zoo\',this,null)">Sound Zoo!</span> Every animal here loves words!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">🐝<span class="pmood" title="Bella feels excited">🤩</span></div><div class="speech-label">BELLA SAYS:</div><div class="speech">I am <span class="yw" onclick="speakWord(\'Bella\',this,null)">Bella</span> the Bee! I love words that <span class="yw" onclick="speakWord(\'RHYME\',this,null)">RHYME!</span> Rhyming words sound alike at the END!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">🐝<span class="pmood" title="Bella is thinking">🤔</span></div><div class="thought-label">BELLA THINKS:</div><div class="thought">Listen! <span class="yw" onclick="speakWord(\'cat\',this,[\'c\',\'a\',\'t\'])">cat</span> and <span class="yw" onclick="speakWord(\'hat\',this,[\'h\',\'a\',\'t\'])">hat</span> both end with the -AT sound. Same ending sound = they RHYME!</div></div>'
++'<div class="panel" style="background:#fff5b0"><div class="pdots"></div><div class="sfx" onclick="playSfx(\'BUZZ!\',this)">BUZZ!</div><div class="speech-label">BELLA SAYS:</div><div class="speech"><span class="yw" onclick="speakWord(\'BEE\',this,[\'b\',\'ee\'])">BEE</span> rhymes with <span class="yw" onclick="speakWord(\'SEE\',this,[\'s\',\'ee\'])">SEE</span> and <span class="yw" onclick="speakWord(\'TREE\',this,[\'t\',\'r\',\'ee\'])">TREE!</span> Same -EE sound at the end!</div></div>'
++'</div>'
++'<div class="sdiv">RHYME TIME QUESTIONS</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSEKRF2.a — Rhyming Words</div><div class="qt">Bella says CAT rhymes with HAT. Which word below also rhymes with CAT?<small>Say each answer choice out loud slowly. Listen carefully to the ENDING sound of each word. Which one ends the same way as CAT and HAT?</small></div><div class="choices">'+mkQ('q1',['Dog','Mat','Sun','Cup'],1,'Correct! MAT ends with the -AT sound, just like cat and hat. You have a great ear for rhymes!','Not quite. Try saying each word out loud and listen to how it ends. Which one ends with the same sound as cat and hat?')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="tip"><div class="tip-ico">💡</div><div class="tip-txt"><strong>STRATEGY TIP!</strong>To find a rhyme, say each word slowly and listen to the LAST part — the ending sound. "Cat" ends in -at. "Dog" ends in -og. Do those match? Keep trying until you find the one that matches!</div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSEKRF2.a — Rhyming Words</div><div class="qt">Which word below rhymes with <span class="yw" onclick="speakWord(\'BEE\',this,[\'b\',\'ee\'])">BEE</span>?<small>Click BEE to hear it. Then say each answer choice and listen to its ending sound. Which ending matches?</small></div><div class="choices">'+mkQ('q2',['Dog','Tree','Hat','Cat'],1,'Correct! TREE ends with the same -EE sound as BEE. Good listening!','Try again. Click the yellow BEE word to hear it again. Then say each choice and listen to its ending sound very carefully.')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="pg c1"><div class="panel" style="background:#e8f0ff"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>MEANWHILE — AT THE OWL TREE...</div><div class="pface">🦉<span class="pmood" title="Ollie is teaching">🧑‍🏫</span></div><div class="speech-label">OLLIE SAYS:</div><div class="speech">I am <span class="yw" onclick="speakWord(\'Ollie\',this,null)">Ollie</span> the Owl! I count SYLLABLES. A syllable is a BEAT in a word. Click each part below to hear it and clap it! The number of clapping hands tells you which beat you are on!</div></div></div>'
++'<div class="sdiv">CLAP THE SYLLABLES!</div>'
++'<div class="syl-demo"><h4>CLICK each part — ONE AT A TIME — to hear it and clap it!</h4>'
++sylRow(['LI','ON'],'LI + ON = 2 syllables. Click each part to hear it, then clap along!')
++sylRow(['EL','E','PHANT'],'EL + E + PHANT = 3 syllables. Click each part to hear it, then clap along!')
++sylRow(['PEN','CIL'],'PEN + CIL = 2 syllables. Click each part to hear it, then clap along!')
++'</div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSEKRF2.b — Counting Syllables</div><div class="qt">How many syllables does the word <span class="yw" onclick="speakWord(\'LION\',this,null)">LION</span> have?<small>Click LION above to hear it. Then find LION in the clapping demo. Click each part — LI, then ON. Look at the yellow box at the end of the row. It shows you the total!</small></div><div class="choices">'+mkQ('q3',['1 syllable','2 syllables','3 syllables','4 syllables'],1,'Correct! LION has 2 syllables. LI is one beat, ON is one beat. Two claps total!','Try using the clapping demo above. Click the LI part, then click the ON part. Look at the yellow box at the end of that row — it shows the total.')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div><div class="stag2">ELAGSEKRF2.b — Counting Syllables</div><div class="qt">How many syllables does the word <span class="yw" onclick="speakWord(\'ELEPHANT\',this,null)">ELEPHANT</span> have?<small>Find ELEPHANT in the clapping demo above. Click each part one at a time — EL, then E, then PHANT. Look at the yellow box at the end of that row to see the total!</small></div><div class="choices">'+mkQ('q4',['1 syllable','2 syllables','3 syllables','5 syllables'],2,'Correct! ELEPHANT has 3 syllables. EL + E + PHANT = 3 beats. Three claps!','Use the clapping demo for ELEPHANT. Click EL, then E, then PHANT. Look at the yellow = box at the end — how many syllables does it show?')+'</div><div class="fb" id="q4-fb"></div></div>'
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div><div class="stag2">ELAGSEKRF2.c — Onset and Rime Blending</div><div class="qt">The beginning sound is <span class="yw" onclick="speakWord(\'C\',this,[\'c\'])">C-</span> and the ending chunk is <span class="yw" onclick="speakWord(\'AT\',this,[\'a\',\'t\'])">-AT</span>. What word do you get when you push them together?<small>Click C to hear the beginning sound. Then click -AT to hear the ending. Now put them together in your mind — say them one right after the other. What word does that make?</small></div><div class="choices">'+mkQ('q5',['CUT','CAT','CAN','COT'],1,'Correct! C plus AT makes CAT. You blended the sounds together perfectly!','Try again. Click C and hear that sound. Then click -AT and hear that ending. Now say them together — no pause in the middle. What word do you hear?')+'</div><div class="fb" id="q5-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>ZOO HERO!</h2><p>'+hi+' '+hn+' — you rocked The Sound Zoo! You practiced rhyming, syllables, and blending sounds! Great work!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">Rhyming words (RF2.a)</div><div class="sr-row">Counting syllables (RF2.b)</div><div class="sr-row">Blending onset and rime (RF2.c)</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}},
+
+// ─── WORD FACTORY ───
+phonics2:{title:'THE WORD FACTORY!',html:function(){
+var hi=HERO.icon||'🤖',hn=HERO.short||'Reader';
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">BUILD WORDS!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++soundNotice()
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Beginning Sounds (RF2.d)</span><span class="sk-pill on">Middle Vowel Sounds (RF2.d)</span><span class="sk-pill on">Ending Sounds (RF2.d)</span><span class="sk-pill on">Substituting Sounds (RF2.e)</span></div></div>'
++'<div class="tip"><div class="tip-ico">🤖</div><div class="tip-txt"><strong>READING TIP!</strong>CVC words have 3 sounds: Beginning, Middle, End. Like <span class="yw" onclick="speakWord(\'C A T\',this,[\'c\',\'a\',\'t\'])">C - A - T</span>. Click the yellow word to hear each sound one at a time! If the sound takes a moment to start, that is normal — just wait!</div></div>'
++'<div class="pg c3">'
++'<div class="panel"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>THE WORD FACTORY</div><div class="pface">🤖<span class="pmood" title="Max is ready">💪</span></div><div class="speech-label">MAX SAYS:</div><div class="speech">I am <span class="yw" onclick="speakWord(\'Max\',this,null)">Max</span> the Robot! We build words by putting sounds together!</div></div>'
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div><div class="pface">🏭<span class="pmood" title="Max is explaining">🧑‍🏫</span></div><div class="speech-label">MAX SAYS:</div><div class="speech">The word <span class="yw" onclick="speakWord(\'SIT\',this,[\'s\',\'i\',\'t\'])">SIT</span> has 3 sounds: <span class="yw" onclick="speakWord(\'s\',this,[\'s\'])">/s/</span> then <span class="yw" onclick="speakWord(\'i\',this,[\'i\'])">/i/</span> then <span class="yw" onclick="speakWord(\'t\',this,[\'t\'])">/t/</span>!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="thought-label">MAX THINKS:</div><div class="pface">🔧<span class="pmood">🤔</span></div><div class="thought">Beginning = FIRST sound. Middle = VOWEL sound. Ending = LAST sound. I can find all three in any CVC word!</div></div>'
++'</div>'
++'<div class="syl-demo"><h4>CLICK EACH SOUND BOX — ONE AT A TIME — to hear it!</h4><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">'
++'<div class="syl-chunk" onclick="clapSyl(\'p\',this)" style="border:3px solid #E8133A"><div class="syl-letter" style="color:#E8133A;border-color:#E8133A">P</div><div class="syl-hands"><span style="font-size:20px">👂</span></div><div class="syl-num">BEGINNING</div></div>'
++'<span style="font-family:\'Bangers\',cursive;font-size:22px;color:#bbb">+</span>'
++'<div class="syl-chunk" onclick="clapSyl(\'ih\',this)" style="border:3px solid #1B4FE8"><div class="syl-letter" style="color:#1B4FE8;border-color:#1B4FE8">I</div><div class="syl-hands"><span style="font-size:20px">👂</span></div><div class="syl-num">MIDDLE</div></div>'
++'<span style="font-family:\'Bangers\',cursive;font-size:22px;color:#bbb">+</span>'
++'<div class="syl-chunk" onclick="clapSyl(\'g\',this)" style="border:3px solid #00A651"><div class="syl-letter" style="color:#00A651;border-color:#00A651">G</div><div class="syl-hands"><span style="font-size:20px">👂</span></div><div class="syl-num">ENDING</div></div>'
++'<span style="font-family:\'Bangers\',cursive;font-size:22px;color:#bbb">=</span>'
++'<div class="syl-chunk" onclick="clapSyl(\'pig\',this)" style="border:3px solid var(--ink);background:var(--y)"><div class="syl-letter">PIG</div><div class="syl-hands"><span style="font-size:20px">🐷</span></div><div class="syl-num">WHOLE WORD</div></div>'
++'</div><p style="font-family:\'Patrick Hand\',cursive;font-size:13px;color:#555">Click each box one at a time. Then click PIG to hear the whole word!</p></div>'
++'<div class="sdiv">SOUND DETECTIVE!</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSEKRF2.d — Beginning Sound</div><div class="qt">Click the word <span class="yw" onclick="speakWord(\'PIG\',this,[\'p\',\'i\',\'g\'])">PIG</span> to hear each sound. What is the VERY FIRST sound you hear?<small>Click the yellow PIG word above. Listen to the first sound that plays. Which answer choice matches that first sound?</small></div><div class="choices">'+mkQ('q1',['/i/ sound','/g/ sound','/p/ sound','/t/ sound'],2,'Correct! The first sound in PIG is /p/. You heard it!','Listen again. Click the yellow PIG word. The very first sound that plays is the answer. Which choice matches?')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSEKRF2.d — Middle Vowel Sound</div><div class="qt">Click the word <span class="yw" onclick="speakWord(\'HOP\',this,[\'h\',\'o\',\'p\'])">HOP</span> to hear each sound. What is the MIDDLE sound?<small>Click HOP and count the sounds: first sound, then middle sound, then last sound. Focus on the middle one. Which answer choice matches?</small></div><div class="choices">'+mkQ('q2',['/h/ sound','/p/ sound','/a/ sound','/o/ sound'],3,'Correct! The middle sound in HOP is /o/. You found the vowel in the middle!','Listen again. Click HOP and count carefully: 1st sound, 2nd sound (middle), 3rd sound. The middle one is the vowel. Which choice is it?')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="pg c2">'
++'<div class="panel" style="background:#fff0e6"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>THE WORD-CHANGE MACHINE!</div><div class="pface">⚙️<span class="pmood">🤩</span></div><div class="speech-label">MAX SAYS:</div><div class="speech">I take <span class="yw" onclick="speakWord(\'CAT\',this,[\'c\',\'a\',\'t\'])">CAT</span> and swap the /c/ for /h/ and I get <span class="yw" onclick="speakWord(\'HAT\',this,[\'h\',\'a\',\'t\'])">HAT!</span> Changing just one sound makes a whole new word!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="sfx" onclick="playSfx(\'POP!\',this)">POP!</div><div class="speech-label">MAX SAYS:</div><div class="speech">Now I swap the middle /a/ for /i/ and <span class="yw" onclick="speakWord(\'HAT\',this,[\'h\',\'a\',\'t\'])">HAT</span> becomes <span class="yw" onclick="speakWord(\'HIT\',this,[\'h\',\'i\',\'t\'])">HIT!</span> One sound change — brand new word!</div></div>'
++'</div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSEKRF2.e — Substitute Beginning Sound</div><div class="qt">Start with the word <span class="yw" onclick="speakWord(\'BAT\',this,[\'b\',\'a\',\'t\'])">BAT</span>. Change ONLY the first sound from /b/ to /s/. Keep everything else the same. What new word do you get?<small>Click BAT to hear it. The beginning sound is /b/. Replace that one sound with /s/ and keep the rest. Say it out loud and see what word you make.</small></div><div class="choices">'+mkQ('q3',['BIT','RAT','SAT','BAG'],2,'Correct! Changing /b/ to /s/ in BAT makes SAT. You substituted a sound!','Try again. Keep the -AT ending exactly the same. Only change that first sound. Say s... then add -AT. What word does that make?')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div><div class="stag2">ELAGSEKRF2.e — Substitute Middle Sound</div><div class="qt">Start with the word <span class="yw" onclick="speakWord(\'PIN\',this,[\'p\',\'i\',\'n\'])">PIN</span>. Change ONLY the middle sound from /i/ to /a/. Keep everything else the same. What new word do you get?<small>Click PIN to hear it. The middle sound is /i/. Replace just that middle sound with /a/ and keep the P at the start and N at the end. Say it out loud!</small></div><div class="choices">'+mkQ('q4',['PAN','PEN','BIN','PIG'],0,'Correct! Changing the middle /i/ to /a/ in PIN makes PAN. You are a sound-swapping master!','Try again. Keep P at the beginning and N at the end. Only change the middle sound. Replace /i/ with /a/. Say it out loud slowly.')+'</div><div class="fb" id="q4-fb"></div></div>'
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div><div class="stag2">ELAGSEKRF2.d — Final Sound</div><div class="qt">Click the word <span class="yw" onclick="speakWord(\'CUP\',this,[\'c\',\'u\',\'p\'])">CUP</span> to hear each sound. What is the VERY LAST sound?<small>Click CUP and listen to all three sounds in order. The answer is the sound you hear last. Which choice matches the final sound?</small></div><div class="choices">'+mkQ('q5',['/c/ sound','/u/ sound','/p/ sound','/b/ sound'],2,'Correct! The last sound in CUP is /p/. You found the final sound!','Click CUP again and wait for all three sounds. The last one — the very final sound — is your answer.')+'</div><div class="fb" id="q5-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>WORD BUILDER!</h2><p>'+hi+' '+hn+' — you mastered the Word Factory! You found beginning, middle, and ending sounds AND swapped them to make new words!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">Beginning, middle, ending sounds (RF2.d)</div><div class="sr-row">Substituting sounds to make new words (RF2.e)</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}},
+
+// ─── SIGHT WORDS ───
+sightwords:{title:'SUPERHERO SIGHT WORDS!',html:function(){
+var hi=HERO.icon||'🦸',hn=HERO.short||'Reader';
+var words=['the','of','to','you','she','my','is','are','do','does','he','we','a','and','I','was','for','on','they','have','from','or','but','not','what','all','were','said'];
+var wg=words.map(function(w){return '<div class="hfw" onclick="clickHFW(\''+w+'\',this)" tabindex="0" role="button" aria-label="'+w+'">'+w+'</div>';}).join('');
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">POWER UP!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++soundNotice()
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">High-Frequency Sight Words (RF4)</span><span class="sk-pill on">Reading in Context</span></div></div>'
++'<div class="tip"><div class="tip-ico">🦸</div><div class="tip-txt"><strong>READING TIP!</strong>Sight words are words we learn to read instantly — no sounding out! Click each word below to hear it. Click ONE word at a time and wait patiently — the sound may take a moment to start on some devices.</div></div>'
++'<div class="pg c2">'
++'<div class="panel" style="background:#ffe6e6"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>THE SIGHT WORD ACADEMY</div><div class="pface">🦸<span class="pmood" title="Captain Sight feels powerful">💪</span></div><div class="speech-label">CAPTAIN SIGHT SAYS:</div><div class="speech">I am Captain Sight! My superpower is reading SIGHT WORDS in a flash — no sounding out needed at all!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="thought-label">CAPTAIN SIGHT THINKS:</div><div class="pface">⚡<span class="pmood">🤩</span></div><div class="thought">Sight words appear in almost EVERY book you will ever read. The more you practice, the faster you will read them!</div></div>'
++'</div>'
++'<div class="sdiv">POWER WORDS — CLICK EACH ONE TO HEAR IT!</div>'
++'<p style="font-family:\'Patrick Hand\',cursive;font-size:14px;color:#555;margin-bottom:9px">Click ONE word at a time. Wait for it to finish before clicking the next word.</p>'
++'<div class="hfw-grid">'+wg+'</div>'
++'<div class="sdiv">CAPTAIN SIGHTS STORY</div>'
++'<div class="pg c3">'
++'<div class="panel"><div class="pdots"></div><div class="pface">🏃<span class="pmood" title="Character feels happy">😄</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech"><span class="yw" onclick="speakWord(\'She\',this,null)">She</span> runs fast. <span class="yw" onclick="speakWord(\'She\',this,null)">She</span> <span class="yw" onclick="speakWord(\'is\',this,null)">is</span> <span class="yw" onclick="speakWord(\'my\',this,null)">my</span> best friend. <span class="yw" onclick="speakWord(\'We\',this,null)">We</span> love <span class="yw" onclick="speakWord(\'to\',this,null)">to</span> play!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">🐕<span class="pmood" title="Dog feels happy">😄</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech"><span class="yw" onclick="speakWord(\'Do\',this,null)">Do</span> <span class="yw" onclick="speakWord(\'you\',this,null)">you</span> have <span class="yw" onclick="speakWord(\'a\',this,null)">a</span> dog? <span class="yw" onclick="speakWord(\'The\',this,null)">The</span> dog <span class="yw" onclick="speakWord(\'is\',this,null)">is</span> big. <span class="yw" onclick="speakWord(\'He\',this,null)">He</span> <span class="yw" onclick="speakWord(\'does\',this,null)">does</span> tricks!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">⭐<span class="pmood" title="Character feels amazed">😮</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Look at <span class="yw" onclick="speakWord(\'the\',this,null)">the</span> stars! <span class="yw" onclick="speakWord(\'They\',this,null)">They</span> <span class="yw" onclick="speakWord(\'are\',this,null)">are</span> bright! <span class="yw" onclick="speakWord(\'What\',this,null)">What</span> <span class="yw" onclick="speakWord(\'do\',this,null)">do</span> <span class="yw" onclick="speakWord(\'you\',this,null)">you</span> see?</div></div>'
++'</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSEKRF4 — Sight Words</div><div class="qt">Which sight word fills the blank? "_____ dog runs fast."<small>Try reading the sentence with each answer choice in the blank. Say it out loud. Which one makes the sentence sound correct in English?</small></div><div class="choices">'+mkQ('q1',['My','She','The','Do'],2,'Correct! THE makes the sentence "The dog runs fast." We use THE to talk about a specific thing.','Try each choice in the blank and say the sentence out loud. "My dog runs fast." "She dog runs fast." Which one sounds like a correct English sentence?')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSEKRF4 — Sight Words</div><div class="qt">Which sight word fills the blank? "_____ you like to swim?"<small>Try each answer choice in the blank. Say the sentence out loud. This sentence is asking a question — which word makes it sound like a proper question?</small></div><div class="choices">'+mkQ('q2',['Do','She','The','My'],0,'Correct! DO makes the sentence "Do you like to swim?" We use DO to ask questions.','Try saying each choice in the blank: "Do you like to swim?" "She you like to swim?" Which one makes a proper question?')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSEKRF4 — Counting Sight Words</div><div class="qt">Read this carefully: "She is my friend. We are happy. Do you want to play?" Count every sight word you can find. Look for: she, is, my, we, are, do, you, to<small>Go through the sentence slowly, word by word. Each time you see one of the words listed above, count it. How many did you find?</small></div><div class="choices">'+mkQ('q3',['4 sight words','6 sight words','8 sight words','10 sight words'],2,'Correct! There are 8 sight words: she, is, my, we, are, do, you, to. You found them all!','Count again more slowly. Touch each word in the sentence one at a time. Count it if it matches the list above: she, is, my, we, are, do, you, to.')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>SIGHT WORD HERO!</h2><p>'+hi+' '+hn+' — you have unlocked the power of sight words! Captain Sight is so proud of you!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">High-frequency sight words (RF4)</div><div class="sr-row">Reading sight words in sentences</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}},
+
+// ─── COMPREHENSION ───
+comprehension:{title:'MYSTERY AT MOON LAKE!',html:function(){
+var hi=HERO.icon||'🔍',hn=HERO.short||'Reader';
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">MYSTERY INVESTIGATION!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Who What Where When Why How (RI1)</span><span class="sk-pill on">Main Idea (RI2)</span><span class="sk-pill on">Character Feelings</span></div></div>'
++'<div class="tip"><div class="tip-ico">🔍</div><div class="tip-txt"><strong>READING TIP!</strong>Good readers ask questions as they read: WHO is in the story? WHAT are they doing? WHERE does it happen? WHEN? WHY? HOW? It is always okay to go back and re-read the story before answering. That is what good readers do!</div></div>'
++'<div class="pg c2">'
++'<div class="panel"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>CHAPTER 1 — MOON LAKE</div><div class="pface">🌙<span class="pmood" title="Maya feels calm">😊</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">One evening, a girl named Maya went to Moon Lake with her dog Biscuit. The water looked silver in the moonlight.</div></div>'
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div><div class="pface">🐕<span class="pmood" title="Biscuit is alert">👀</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Suddenly, Biscuit barked loudly and jumped into the tall grass near the water. Maya ran after him!</div></div>'
++'<div class="panel" style="background:#fff5b0"><div class="pdots"></div><div class="sfx" onclick="playSfx(\'BARK!\',this)">BARK!</div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Maya pushed the grass apart. She gasped! There was a tiny duckling all alone, stuck in the mud.</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="thought-label">MAYA THINKS:</div><div class="pface">🐣<span class="pmood" title="Maya feels caring">🥰</span></div><div class="thought">Maya gently picked up the duckling and carried it to the edge of the lake. "Go find your family," she whispered.</div></div>'
++'</div>'
++'<div class="pg c1"><div class="panel" style="background:#e6ffe6"><div class="pdots"></div><div class="sfx" onclick="playSfx(\'QUACK!\',this)" style="font-size:26px">QUACK!</div><div class="pface">🦆<span class="pmood" title="Duckling feels happy">😄</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech" style="max-width:72%">The duckling splashed into the water and swam to its mama duck! Maya and Biscuit walked home smiling.</div></div></div>'
++'<div class="tip"><div class="tip-ico">💡</div><div class="tip-txt"><strong>NOTICE THE FACE EMOJIS!</strong>Look at the small emoji on each character: 😊 🥰 👀 — they show how the character FEELS! Speech bubbles show what a character SAYS. Thought bubbles show what a character THINKS inside their head.</div></div>'
++'<div class="sdiv">READING DETECTIVE QUESTIONS!</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSE2RI1 — WHO</div><div class="qt">WHO are the main characters in this story?<small>Re-read the beginning of the story. Who are the characters we follow throughout the whole story? The main characters are the ones the story is mostly about.</small></div><div class="choices">'+mkQ('q1',['A boy and a cat','Maya and her dog Biscuit','Three ducks','The moon'],1,'Correct! Maya and her dog Biscuit are the main characters. The story follows them from beginning to end.','Re-read the first sentence of the story. Who went to Moon Lake? Those are the characters the story is mostly about.')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSE2RI1 — WHERE and WHEN</div><div class="qt">WHERE did the story happen AND what time of day was it?<small>Re-read the story. Look for the name of the PLACE and any words that tell you the TIME. Both clues are written in the story.</small></div><div class="choices">'+mkQ('q2',['A school, in the morning','A forest, at noon','Moon Lake, in the evening','A city park, at night'],2,'Correct! The story takes place at Moon Lake in the evening. WHERE is Moon Lake and WHEN is evening.','Look at the story again. Find the name of the body of water. Then look for any word that tells you what time of day it was.')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSE2RI1 — WHAT happened?</div><div class="qt">WHAT did Biscuit discover in the tall grass?<small>Find the part of the story where Biscuit jumps into the grass. Re-read what happened after Maya pushed the grass apart.</small></div><div class="choices">'+mkQ('q3',['A turtle','A fish','A tiny duckling stuck in the mud','A frog'],2,'Correct! Biscuit found a tiny duckling stuck in the mud. Good reading!','Re-read the story from where Biscuit jumps into the grass. What did Maya see when she pushed the grass apart?')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div><div class="stag2">ELAGSE2RI2 — Main Idea</div><div class="qt">What is this story MAINLY about? Think about the whole story from beginning to end.<small>Ask yourself: what happens in every single panel? What one big idea connects all of them together? The main idea is what the whole story is about, not just one small part.</small></div><div class="choices">'+mkQ('q4',['The moon and how it shines','How to swim in a lake','A girl and her dog who rescue a lost duckling','Why dogs bark at grass'],2,'Correct! The whole story is about Maya and Biscuit rescuing a lost duckling. That is the main idea.','Think about every panel from start to finish. What is happening in ALL of them? What one idea connects the whole story together?')+'</div><div class="fb" id="q4-fb"></div></div>'
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div><div class="stag2">ELAGSE2RI1 — HOW and Character Feelings</div><div class="qt">HOW did Maya help the duckling, and what do her actions tell us about how she was FEELING?<small>Look at Maya\'s thought bubble panel. Read what she does and says. Then look at her face emoji. What do her actions and expression show about her feelings?</small></div><div class="choices">'+mkQ('q5',['She yelled at it to move','She walked away and did nothing','She gently picked it up and carried it to the water','She called for help on a phone'],2,'Correct! Maya gently picked it up and whispered kindly. Her gentle actions show she was caring. Characters\' feelings show in what they DO and THINK.','Re-read Maya\'s thought bubble. What exactly does she do? Does someone who is caring act gently, or roughly? What does her face emoji show?')+'</div><div class="fb" id="q5-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>MYSTERY SOLVED!</h2><p>'+hi+' '+hn+' — you answered WHO, WHAT, WHERE, WHEN, HOW, and found the main idea! You are a reading detective!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">Who, What, Where, When, How questions (RI1)</div><div class="sr-row">Main idea (RI2)</div><div class="sr-row">Character feelings through actions and expression</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}},
+
+// ─── CAUSE & EFFECT ───
+causeeffect:{title:'CAUSE & EFFECT SQUAD!',html:function(){
+var hi=HERO.icon||'⚡',hn=HERO.short||'Reader';
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">SQUAD MISSION!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Cause and Effect (RI3)</span><span class="sk-pill on">Authors Purpose (RI6)</span><span class="sk-pill on">Story Sequence</span><span class="sk-pill on">Onomatopoeia</span></div></div>'
++'<div class="tip"><div class="tip-ico">⚡</div><div class="tip-txt"><strong>READING TIP!</strong>CAUSE = WHY something happened. EFFECT = WHAT happened because of it. Look for clue words in the story: <span class="yw" onclick="speakWord(\'because\',this,null)">because</span>, <span class="yw" onclick="speakWord(\'so\',this,null)">so</span>, <span class="yw" onclick="speakWord(\'that is why\',this,null)">that is why</span>. These words connect causes and effects!</div></div>'
++'<div class="pg c3">'
++'<div class="panel" style="background:#ffe6f0"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>THE RAINY DAY</div><div class="pface">☁️<span class="pmood" title="Rainy weather">🌧️</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">It rained all morning. <span class="hlr">BECAUSE</span> it rained, the school playground was very wet and muddy!</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">🏫<span class="pmood" title="Teacher is thinking">🤔</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech"><span class="hlr">BECAUSE</span> the playground was wet, the teacher decided the students had to stay inside for recess.</div></div>'
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div><div class="pface">🎲<span class="pmood" title="Students feel happy">😄</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech"><span class="hlr">SO</span> the students played board games inside! <span class="hlr">THAT IS WHY</span> everyone had fun — even on a rainy day!</div></div>'
++'</div>'
++'<div style="background:white;border:4px solid var(--ink);padding:14px;margin:12px 0;box-shadow:4px 4px 0 var(--ink)"><div style="font-family:\'Bangers\',cursive;font-size:17px;letter-spacing:1px;margin-bottom:8px;color:var(--ink)">THE CAUSE AND EFFECT CHAIN:</div><div style="font-family:\'Patrick Hand\',cursive;font-size:15px;line-height:2.4;color:var(--ink)">It rained &rarr; Wet playground &rarr; Stay inside &rarr; Play games &rarr; Fun day!</div></div>'
++'<div class="tip"><div class="tip-ico">💥</div><div class="tip-txt"><strong>SOUND WORDS — ONOMATOPOEIA!</strong>Comics use SOUND WORDS that sound like the noise they describe! Click these one at a time: <span class="sfx" style="font-size:18px;display:inline-block;margin:3px" onclick="playSfx(\'BOOM!\',this)">BOOM!</span> <span class="sfx" style="font-size:18px;display:inline-block;margin:3px" onclick="playSfx(\'ZAP!\',this)">ZAP!</span> <span class="sfx" style="font-size:18px;display:inline-block;margin:3px" onclick="playSfx(\'WHOOSH!\',this)">WHOOSH!</span></div></div>'
++'<div class="sdiv">CAUSE AND EFFECT CHALLENGES!</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSE2RI3 — Cause and Effect</div><div class="qt">The playground was wet. What was the CAUSE — the reason it was wet?<small>Re-read the story. Think about what happened FIRST. What event led to the playground being wet? Look for the word BECAUSE to help you find the cause.</small></div><div class="choices">'+mkQ('q1',['A water balloon fight','Someone left the hose on','It rained','The janitor spilled water'],2,'Correct! The rain was the cause. It rained, and BECAUSE of that, the playground got wet.','Re-read the very first sentence of the story. What event is described that could make a playground wet? Look for the cause word BECAUSE.')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSE2RI3 — Cause and Effect</div><div class="qt">BECAUSE the playground was wet, what EFFECT happened? What decision did the teacher make?<small>Re-read the middle part of the story. Look for the word BECAUSE. What happened as a direct result of the wet playground?</small></div><div class="choices">'+mkQ('q2',['She gave extra homework','She took them to a museum','Students stayed inside for recess','They got extra lunch time'],2,'Correct! Because the playground was wet, the students stayed inside for recess. Wet playground caused the inside decision.','Re-read the second panel. What did the teacher decide to do because of the wet playground? That decision is the effect.')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="pg c2">'
++'<div class="panel" style="background:#e6ffe6"><div class="pdots"></div><div class="narr"><span class="narr-label">NARRATOR</span>SAMS GARDEN</div><div class="pface">🌱<span class="pmood" title="Plant feels sick">😢</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Sam forgot to water his plant for three days. The leaves turned yellow and drooped down sadly.</div></div>'
++'<div class="panel"><div class="pdots"></div><div class="pface">💧<span class="pmood" title="Sam feels sorry">😟</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Sam felt bad. He watered the plant right away and put it in the sunny window to help it heal.</div></div>'
++'<div class="panel" style="background:#fff5b0"><div class="pdots"></div><div class="sfx" onclick="playSfx(\'BLOOM!\',this)" style="font-size:26px">BLOOM!</div><div class="pface">🌸<span class="pmood" title="Plant feels healthy">😄</span></div><div class="speech-label">NARRATOR SAYS:</div><div class="speech">Two days later, the plant was green and tall and grew two beautiful flowers!</div></div>'
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div><div class="thought-label">SAM THINKS:</div><div class="pface">🧒<span class="pmood" title="Sam feels happy">😊</span></div><div class="thought">Plants need water and sun to grow. Without those things, they get sick.</div></div>'
++'</div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSE2RI3 — Cause and Effect</div><div class="qt">Why did the plant turn yellow and droop? What was the CAUSE?<small>Re-read the Sam story. What important thing did Sam forget to do? Think about how that missing action could affect a plant.</small></div><div class="choices">'+mkQ('q3',['Too much sunshine','Sam forgot to water it for three days','A bug ate the plant','Wrong kind of soil'],1,'Correct! The cause was Sam forgetting to water the plant. No water led to a sick plant.','Re-read the first sentence of the Sam story. What did Sam forget to do? How does that connect to a plant turning yellow?')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div><div class="stag2">ELAGSE2RI6 — Authors Purpose</div><div class="qt">WHY do you think the author wrote the story about Sam and his plant? What lesson did the author want the reader to learn?<small>Look at what Sam learns in his thought bubble at the end. Why would an author choose to tell a story with that ending? What did they want readers to understand?</small></div><div class="choices">'+mkQ('q4',['To tell a funny joke about plants','To teach that plants need water and care','To explain how flowers make seeds','To show that forgetting things is always bad'],1,'Correct! The author wanted to teach that living things need care and attention. That is the author\'s purpose.','Read Sam\'s thought bubble at the end of the story. What idea does Sam realize? Why would the author have chosen to end the story that way?')+'</div><div class="fb" id="q4-fb"></div></div>'
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div><div class="stag2">ELAGSE2RI3 — Cause and Effect Chain</div><div class="qt">BECAUSE Sam watered the plant and gave it sunshine, what happened to the plant?<small>Re-read the third and fourth panels of the Sam story. What changed after Sam started taking care of the plant? That change is the EFFECT of his good care.</small></div><div class="choices">'+mkQ('q5',['The plant stayed yellow','The plant died','The plant turned green and grew flowers','Sam had to buy a new plant'],2,'Correct! Good care caused the plant to recover and bloom. Care and attention led to a healthy, flowering plant.','Re-read the BLOOM panel and the panel after it. What happened to the plant after Sam watered it and gave it sun? That result is the effect.')+'</div><div class="fb" id="q5-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>CAUSE AND EFFECT HERO!</h2><p>'+hi+' '+hn+' — you understand cause and effect! You also heard onomatopoeia — BOOM, ZAP, BLOOM — words that sound like what they describe!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">Cause and effect (RI3)</div><div class="sr-row">Authors purpose (RI6)</div><div class="sr-row">Onomatopoeia — sound words</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}},
+
+// ─── TEXT FEATURES ───
+textfeatures:{title:'TEXT FEATURE HEROES!',html:function(){
+var hi=HERO.icon||'📰',hn=HERO.short||'Reader';
+return ''
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">TEXT FEATURE MISSION!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Word Meanings (RI4)</span><span class="sk-pill on">Text Features (RI5)</span><span class="sk-pill on">Main Topic (RI2)</span><span class="sk-pill on">Authors Purpose (RI6)</span></div></div>'
++'<div class="tip"><div class="tip-ico">📰</div><div class="tip-txt"><strong>READING TIP!</strong>Nonfiction books have special tools called TEXT FEATURES. As you read the article below, look for: HEADINGS (big titles that name each section), BOLD WORDS (important vocabulary), CAPTIONS (descriptions under pictures), and the GLOSSARY (a list that defines bold words).</div></div>'
++'<div class="pg c1"><div class="panel" style="background:#fff0e6;min-height:100px"><div class="pdots"></div><div class="pface">🦸<span class="pmood" title="Ranger is ready to teach">🧑‍🏫</span></div><div class="speech-label">TEXT FEATURE RANGER SAYS:</div><div class="speech">I use text features to find information quickly — like a reading navigator! Let me show you how!</div></div></div>'
++'<div class="sdiv">A NONFICTION ARTICLE</div>'
++'<p style="font-family:\'Patrick Hand\',cursive;font-size:14px;color:#555;margin-bottom:10px">Read the article below and look for the text features as you go!</p>'
++'<div class="artbox">'
++'<div class="arth">AMAZING BUTTERFLIES</div>'
++'<div class="arts">WHAT IS A BUTTERFLY?</div>'
++'<p class="artb">A butterfly is an insect. All butterflies go through an amazing change called <strong>metamorphosis</strong>. This means they change their body shape completely as they grow!</p>'
++'<div class="arts">THE FOUR STAGES</div>'
++'<p class="artb">Butterflies have <strong>four life stages</strong>:</p>'
++'<div style="padding-left:15px;font-family:\'Patrick Hand\',cursive;font-size:14px;line-height:2.2;margin-bottom:12px;color:#222">Stage 1: <strong>Egg</strong> — The butterfly starts as a tiny egg on a leaf.<br>Stage 2: <strong>Caterpillar (Larva)</strong> — The egg hatches and eats leaves.<br>Stage 3: <strong>Chrysalis (Pupa)</strong> — The caterpillar wraps itself in a shell and rests.<br>Stage 4: <strong>Butterfly (Adult)</strong> — A beautiful butterfly comes out and flies away!</div>'
++'<div class="artc">CAPTION: This monarch butterfly traveled 2,000 miles to reach a warm place for winter!</div>'
++'<div class="arts">GLOSSARY OF BOLD WORDS</div>'
++'<div style="font-family:\'Patrick Hand\',cursive;font-size:14px;line-height:2.2;color:#222"><strong>Metamorphosis</strong> — a big change in an animal\'s body shape<br><strong>Larva</strong> — the caterpillar stage of a butterfly<br><strong>Chrysalis</strong> — the hard shell the caterpillar makes around itself</div>'
++'</div>'
++'<div class="sdiv">TEXT FEATURE QUESTIONS!</div>'
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div><div class="stag2">ELAGSE2RI5 — Headings</div><div class="qt">What is the MAIN HEADING — the big blue title at the very top of the article?<small>Look at the very top of the article above. The main heading is the largest text, in the big blue box. What does it say?</small></div><div class="choices">'+mkQ('q1',['The Four Stages','What is a Butterfly?','Amazing Butterflies','Metamorphosis'],2,'Correct! The main heading is "Amazing Butterflies." The main heading tells you what the whole article is about.','Look back at the article. Find the biggest, most prominent title at the very top — the one in the large blue box. What does it say?')+'</div><div class="fb" id="q1-fb"></div></div>'
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div><div class="stag2">ELAGSE2RI4 — Vocabulary / Bold Words</div><div class="qt">The article has a GLOSSARY section that defines bold words. Find the word "metamorphosis" in the Glossary. What does it mean?<small>Look for the section in the article labeled "GLOSSARY OF BOLD WORDS." Find the word metamorphosis there and read its definition carefully.</small></div><div class="choices">'+mkQ('q2',['A type of butterfly color','Flying south for winter','A big change in an animal\'s body shape','The food butterflies eat'],2,'Correct! The glossary tells us metamorphosis means a big change in an animal\'s body shape. Good use of the glossary!','Find the GLOSSARY OF BOLD WORDS section in the article. Look for the word metamorphosis. Read the words that come after the dash — those words are the definition.')+'</div><div class="fb" id="q2-fb"></div></div>'
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div><div class="stag2">ELAGSE2RI5 — Captions</div><div class="qt">The article has a CAPTION in the yellow-bordered box. What information does the caption give us?<small>Find the text in the yellow-bordered box inside the article. A caption gives extra details about a picture. What does this caption tell us?</small></div><div class="choices">'+mkQ('q3',['Butterflies only live one day','All butterflies are orange','A monarch butterfly traveled 2,000 miles to a warm place','Butterflies eat flowers every morning'],2,'Correct! The caption tells us about a monarch butterfly that traveled 2,000 miles. Captions add extra information!','Find the yellow-bordered box in the article. Read the text inside it. A caption gives details about a specific picture or event. What detail does this one share?')+'</div><div class="fb" id="q3-fb"></div></div>'
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div><div class="stag2">ELAGSE2RI2 — Main Topic</div><div class="qt">What is the main topic of the WHOLE article?<small>Think about every section of the article — the heading, the paragraphs, the glossary. What one big subject does every part of the article deal with?</small></div><div class="choices">'+mkQ('q4',['How to catch butterflies','Types of garden insects','Butterflies — what they are and how they grow','Why butterflies are beautiful'],2,'Correct! The whole article is about butterflies and their life cycle. Every section connects to that main topic.','Look at every section heading and think about what they all have in common. What one subject ties every section of the article together?')+'</div><div class="fb" id="q4-fb"></div></div>'
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div><div class="stag2">ELAGSE2RI6 — Authors Purpose</div><div class="qt">WHY do you think the author wrote this article? What was the author trying to do?<small>Think about the type of writing this is — does it tell a made-up story, give you instructions, or share real facts? What was the author trying to do for the reader?</small></div><div class="choices">'+mkQ('q5',['To tell a made-up story about a talking butterfly','To write a poem about nature','To explain and teach real facts about butterflies','To give instructions for raising butterflies as pets'],2,'Correct! The author\'s purpose was to inform and explain real facts about butterflies. That is what nonfiction authors do.','Is this article a fictional story, a set of instructions, or a collection of real facts? What kind of writing is it? That will tell you the author\'s purpose.')+'</div><div class="fb" id="q5-fb"></div></div>'
++'<div class="cbanner" id="cBanner"><h2>TEXT FEATURE HERO!</h2><p>'+hi+' '+hn+' — you unlocked the secrets of text features! Headings, bold words, captions, and glossaries are your reading superpowers!</p><div class="srpt"><h4>WHAT YOU PRACTICED:</h4><div class="sr-row">Word meanings from the glossary (RI4)</div><div class="sr-row">Text features: headings, captions, bold words (RI5)</div><div class="sr-row">Main topic of nonfiction text (RI2)</div><div class="sr-row">Authors purpose (RI6)</div></div><button class="rbtn" onclick="goBack()">PICK ANOTHER COMIC!</button><button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button></div>';
+}}
+}; // end LESSONS
+
+// ─────────────────────────────────────────────────────────────────
+// LESSON 7 — THREE STORY ADVENTURES (Reading Comprehension)
+// Three complete stories with questions after each one
+// ─────────────────────────────────────────────────────────────────
+LESSONS.reading3={title:'THREE STORY ADVENTURES!',html:function(){
+var hi=HERO.icon||'📖',hn=HERO.short||'Reader';
+function panel(bg,narr,face,mood,moodTitle,bubType,lbl,txt){
+  var p='<div class="panel"'+(bg?' style="background:'+bg+'"':'')+'>'+
+    '<div class="pdots"></div>'+
+    (narr?'<div class="narr"><span class="narr-label">NARRATOR</span>'+narr+'</div>':'');
+  if(face) p+='<div class="pface">'+face+'<span class="pmood" title="'+moodTitle+'">'+mood+'</span></div>';
+  if(bubType==='speech') p+='<div class="speech-label">'+lbl+'</div><div class="speech">'+txt+'</div>';
+  else if(bubType==='thought') p+='<div class="thought-label">'+lbl+'</div><div class="thought">'+txt+'</div>';
+  else if(bubType==='sfx') p+='<div class="sfx" onclick="playSfx(\''+txt+'\',this)">'+txt+'</div>';
+  p+='</div>';
+  return p;
+}
+return ''
+// ─── HEADER ───
++'<div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0%"></div><div class="prog-text">THREE STORY ADVENTURES!</div></div>'
++'<div class="stars-row"><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span><span class="sp">&#9733;</span></div>'
++'<div class="sk-track"><h4>SKILLS YOU ARE PRACTICING TODAY</h4><div class="sk-pills"><span class="sk-pill on">Key Details — Who What Where When (RI1)</span><span class="sk-pill on">Main Idea (RI2)</span><span class="sk-pill on">Cause and Effect (RI3)</span><span class="sk-pill on">Character Feelings</span><span class="sk-pill on">Making Inferences</span></div></div>'
+
++'<div class="tip"><div class="tip-ico">📖</div><div class="tip-txt"><strong>READING TIP!</strong>There are THREE stories in this comic. Read each story all the way through BEFORE answering the questions. If you forget something, go back and re-read — that is exactly what good readers do! Take your time. There is no rush.</div></div>'
+
+// ═══════════════════════════════════
+// STORY 1 — THE NEW KID
+// ═══════════════════════════════════
++'<div style="background:#1B4FE8;color:white;font-family:\'Bangers\',cursive;font-size:22px;letter-spacing:2px;padding:10px 18px;border:4px solid var(--ink);margin-bottom:0;box-shadow:4px 4px 0 var(--ink)">STORY 1 — THE NEW KID</div>'
+
++'<div class="pg c2">'
+
++'<div class="panel"><div class="pdots"></div>'
++'<div class="narr"><span class="narr-label">NARRATOR</span>THE FIRST DAY</div>'
++'<div class="pface">🧒<span class="pmood" title="Jaylen feels nervous">😟</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">It was Jaylen\'s first day at a new school. His family had just moved to a new town. His stomach felt like it was full of butterflies. He did not know anyone.</div>'
++'</div>'
+
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div>'
++'<div class="pface">🧒<span class="pmood" title="Jaylen feels unsure">😰</span></div>'
++'<div class="thought-label">JAYLEN THINKS:</div>'
++'<div class="thought">Jaylen sat down at a lunch table all by himself. He stared at his sandwich and wished he could go home. He missed his old friends very much.</div>'
++'</div>'
+
++'<div class="panel"><div class="pdots"></div>'
++'<div class="pface">👧<span class="pmood" title="Priya feels friendly">😊</span></div>'
++'<div class="speech-label">PRIYA SAYS:</div>'
++'<div class="speech">Suddenly, a girl with a bright yellow backpack sat down across from him. "Hi! I am Priya. You look like you could use a friend. I made the same face on MY first day!"</div>'
++'</div>'
+
++'<div class="panel" style="background:#e6ffe6"><div class="pdots"></div>'
++'<div class="pface">🧒<span class="pmood" title="Jaylen feels relieved and happy">😄</span></div>'
++'<div class="speech-label">JAYLEN SAYS:</div>'
++'<div class="speech">Jaylen smiled for the first time all day. "Really? You were new too?" By the end of lunch, they had already planned to play at recess together.</div>'
++'</div>'
+
++'</div>'// end panel grid
+
++'<div class="tip"><div class="tip-ico">💡</div><div class="tip-txt"><strong>RE-READ TIP!</strong>Before you answer the questions below, go back and read Story 1 again from the beginning. Look at each panel one at a time. Think about who is in the story, what happens, and how each character feels.</div></div>'
+
++'<div class="sdiv">STORY 1 QUESTIONS</div>'
+
++'<div class="qs" id="q1"><div class="qlbl">QUESTION 1</div>'
++'<div class="stag2">ELAGSE2RI1 — WHO and WHERE</div>'
++'<div class="qt">WHO is the main character in Story 1, and WHERE does the important event happen?<small>Look at the story again. Who does every panel focus on? Where are they when something important happens?</small></div>'
++'<div class="choices">'+mkQ('q1',
+  ['Priya at a playground','Jaylen at a school lunch table','Jaylen at his old home','Priya in a classroom'],
+  1,
+  'Correct! Jaylen is the main character and the important event happens at the school lunch table. Good reading!',
+  'Re-read the story. Every panel follows one main character. Where is that character when the big moment happens?')+'</div>'
++'<div class="fb" id="q1-fb"></div></div>'
+
++'<div class="qs" id="q2"><div class="qlbl">QUESTION 2</div>'
++'<div class="stag2">ELAGSE2RI1 — Character Feelings</div>'
++'<div class="qt">Look at Jaylen\'s face emoji at the start of the story and at the end. How did his feelings CHANGE from beginning to end?<small>Look at the face emojis on Jaylen in the first panel and the last panel. What is different about them?</small></div>'
++'<div class="choices">'+mkQ('q2',
+  ['He stayed nervous the whole time','He went from happy to sad','He went from nervous and lonely to relieved and happy','He was angry at the start and calm at the end'],
+  2,
+  'Correct! Jaylen started out nervous and lonely, then ended up relieved and happy after meeting Priya. Characters\' feelings change as stories move forward.',
+  'Look at the first panel and the last panel. Find Jaylen\'s small face emoji. What feeling does he have at the start? What feeling does he have at the end?')+'</div>'
++'<div class="fb" id="q2-fb"></div></div>'
+
++'<div class="qs" id="q3"><div class="qlbl">QUESTION 3</div>'
++'<div class="stag2">ELAGSE2RI2 — Main Idea</div>'
++'<div class="qt">What is Story 1 mainly about? Think about the whole story from start to finish.<small>Ask yourself what happens in EVERY panel. What one big idea connects all four panels together?</small></div>'
++'<div class="choices">'+mkQ('q3',
+  ['A boy who does not like sandwiches','A girl with a yellow backpack goes to school','A nervous new student makes a friend at lunch','Two friends play at recess together'],
+  2,
+  'Correct! The whole story is about a nervous new student who makes a friend at lunch. That is the main idea that connects every panel.',
+  'Think about ALL four panels together. What is happening in every single one? What one idea ties the whole story together?')+'</div>'
++'<div class="fb" id="q3-fb"></div></div>'
+
+// ═══════════════════════════════════
+// STORY 2 — THE STORM
+// ═══════════════════════════════════
++'<div style="background:var(--r);color:white;font-family:\'Bangers\',cursive;font-size:22px;letter-spacing:2px;padding:10px 18px;border:4px solid var(--ink);margin:24px 0 0;box-shadow:4px 4px 0 var(--ink)">STORY 2 — THE STORM</div>'
+
++'<div class="pg c2">'
+
++'<div class="panel"><div class="pdots"></div>'
++'<div class="narr"><span class="narr-label">NARRATOR</span>A DARK AFTERNOON</div>'
++'<div class="pface">☁️<span class="pmood" title="Sky looks threatening">⛈️</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">One afternoon, dark clouds rolled in fast. The wind began to blow hard and tree branches shook back and forth. Ana was riding her bike down the street.</div>'
++'</div>'
+
++'<div class="panel" style="background:#fff5b0"><div class="pdots"></div>'
++'<div class="sfx" onclick="playSfx(\'CRACK!\',this)" style="font-size:30px">CRACK!</div>'
++'<div class="pface">🚲<span class="pmood" title="Ana is startled">😱</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">A loud crack of thunder made Ana jump off her bike. She left it on the sidewalk and ran to the nearest covered porch she could find.</div>'
++'</div>'
+
++'<div class="panel" style="background:#e6f0ff"><div class="pdots"></div>'
++'<div class="pface">👵<span class="pmood" title="Ms. Rosa feels kind">🤗</span></div>'
++'<div class="speech-label">MS. ROSA SAYS:</div>'
++'<div class="speech">An old woman opened the door. "Come in, dear. I am Ms. Rosa. This storm looks like a bad one. You can wait here until it passes."</div>'
++'</div>'
+
++'<div class="panel" style="background:#fffbe6"><div class="pdots"></div>'
++'<div class="pface">🌦️<span class="pmood" title="Weather is clearing up">😌</span></div>'
++'<div class="thought-label">ANA THINKS:</div>'
++'<div class="thought">Twenty minutes later, the rain stopped. The sun came back out. Ana thanked Ms. Rosa and went to get her bike — still right where she had left it.</div>'
++'</div>'
+
++'</div>'
+
++'<div class="tip"><div class="tip-ico">💡</div><div class="tip-txt"><strong>RE-READ TIP!</strong>Before answering, go back and read Story 2 from the beginning. Notice the clue word CRACK — that is an onomatopoeia! It sounds like the noise it describes. Think about WHY Ana ran to the porch.</div></div>'
+
++'<div class="sdiv">STORY 2 QUESTIONS</div>'
+
++'<div class="qs" id="q4"><div class="qlbl">QUESTION 4</div>'
++'<div class="stag2">ELAGSE2RI1 — WHAT happened and WHY</div>'
++'<div class="qt">WHY did Ana leave her bike on the sidewalk and run to a porch?<small>Re-read the story. Look for WHAT event scared Ana and caused her to run. Think about what a sudden loud crack of thunder would make someone do.</small></div>'
++'<div class="choices">'+mkQ('q4',
+  ['She was tired of riding','Her bike was broken','A loud crack of thunder startled her during the storm','She wanted to visit Ms. Rosa'],
+  2,
+  'Correct! The loud crack of thunder startled Ana and caused her to run for cover. The storm caused her action — that is cause and effect!',
+  'Re-read the second panel carefully. What happens right before Ana jumps off her bike? That event is the CAUSE of what she did.')+'</div>'
++'<div class="fb" id="q4-fb"></div></div>'
+
++'<div class="qs" id="q5"><div class="qlbl">QUESTION 5</div>'
++'<div class="stag2">ELAGSE2RI3 — Cause and Effect</div>'
++'<div class="qt">In Story 2, the storm caused a chain of events. Which is the correct order from CAUSE to final EFFECT?<small>Think about what happened first, then what happened because of it, and so on. What was the final result at the very end of the story?</small></div>'
++'<div class="choices">'+mkQ('q5',
+  ['Ana rode her bike, then it started raining, then she went home','Dark storm came, thunder cracked, Ana ran to porch, waited safely, storm passed','Ms. Rosa called Ana inside, then the storm started','Ana got wet in the rain, then found a dry place'],
+  1,
+  'Correct! That is the full cause-and-effect chain: storm came, thunder startled Ana, she ran to shelter, she waited safely, and then the storm passed. One thing led to the next!',
+  'Read the story in order from panel 1 to panel 4. What happened first? What happened BECAUSE of that? Keep following the chain to the end.')+'</div>'
++'<div class="fb" id="q5-fb"></div></div>'
+
++'<div class="qs" id="q6"><div class="qlbl">QUESTION 6</div>'
++'<div class="stag2">ELAGSE2RI1 — Making an Inference</div>'
++'<div class="qt">At the end of Story 2, Ana found her bike exactly where she left it. What does this tell us about the neighborhood?<small>The story does not tell us directly. Think about what it means when something you left outside is still there when you come back.</small></div>'
++'<div class="choices">'+mkQ('q6',
+  ['The neighborhood had strong wind that moved things','The neighborhood was a safe and trustworthy place','Nobody else was outside during the storm','Ms. Rosa had moved the bike for Ana'],
+  1,
+  'Correct! The fact that the bike was untouched shows the neighborhood was a safe and trustworthy place. You made an inference — a smart conclusion from clues in the text!',
+  'The story tells you the bike was still there. Think about what that means. If something you left outside is still there, what does that suggest about where you are?')+'</div>'
++'<div class="fb" id="q6-fb"></div></div>'
+
+// ═══════════════════════════════════
+// STORY 3 — THE GARDEN CONTEST
+// ═══════════════════════════════════
++'<div style="background:var(--g);color:white;font-family:\'Bangers\',cursive;font-size:22px;letter-spacing:2px;padding:10px 18px;border:4px solid var(--ink);margin:24px 0 0;box-shadow:4px 4px 0 var(--ink)">STORY 3 — THE GARDEN CONTEST</div>'
+
++'<div class="pg c2">'
+
++'<div class="panel"><div class="pdots"></div>'
++'<div class="narr"><span class="narr-label">NARRATOR</span>SPRING PLANTING TIME</div>'
++'<div class="pface">👦<span class="pmood" title="Marcus feels excited">🤩</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">Marcus and his neighbor Lily both planted sunflower seeds on the same day. Their teacher had started a class garden contest to see whose sunflower would grow tallest by June.</div>'
++'</div>'
+
++'<div class="panel" style="background:#fffbe6"><div class="pdots"></div>'
++'<div class="pface">👧<span class="pmood" title="Lily feels determined">💪</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">Lily watered her plant every single morning. She pulled out weeds so they would not steal her plant\'s food. She even sang to it, saying "Plants like music!"</div>'
++'</div>'
+
++'<div class="panel" style="background:#ffe6e6"><div class="pdots"></div>'
++'<div class="pface">👦<span class="pmood" title="Marcus feels guilty">😬</span></div>'
++'<div class="thought-label">MARCUS THINKS:</div>'
++'<div class="thought">Marcus forgot to water his plant some days. He pulled a few weeds but not all of them. He spent most afternoons playing video games instead.</div>'
++'</div>'
+
++'<div class="panel" style="background:#e6ffe6"><div class="pdots"></div>'
++'<div class="pface">🌻<span class="pmood" title="Lily wins! She feels proud and kind">🥇</span></div>'
++'<div class="speech-label">NARRATOR SAYS:</div>'
++'<div class="speech">By June, Lily\'s sunflower was tall and bright. Marcus\'s plant was shorter and droopy. Lily won the contest. But she gave Marcus some seeds and said, "Let\'s try again together next time!"</div>'
++'</div>'
+
++'</div>'
+
++'<div class="tip"><div class="tip-ico">💡</div><div class="tip-txt"><strong>RE-READ TIP!</strong>Before answering, go back and read Story 3 from the start. Think about what each character DID differently. That difference is the CAUSE of the different results. Notice what Lily says at the very end — what does that tell you about her character?</div></div>'
+
++'<div class="sdiv">STORY 3 QUESTIONS</div>'
+
++'<div class="qs" id="q7"><div class="qlbl">QUESTION 7</div>'
++'<div class="stag2">ELAGSE2RI3 — Cause and Effect</div>'
++'<div class="qt">Why did Lily\'s sunflower grow taller than Marcus\'s sunflower?<small>Re-read what Lily did every day and what Marcus did. What did Lily do differently? How did those actions lead to a different result?</small></div>'
++'<div class="choices">'+mkQ('q7',
+  ['Lily had a better spot in the garden','Lily started with a bigger seed','Lily watered and cared for her plant every day while Marcus did not','Marcus did not like sunflowers'],
+  2,
+  'Correct! Lily cared for her plant consistently every day and that caused it to grow tall. Marcus did not put in the same effort and that caused his plant to grow poorly. Actions have consequences!',
+  'Compare what Lily did in panel 2 with what Marcus did in panel 3. What is the key DIFFERENCE in how they treated their plants? That difference is the cause of the different results.')+'</div>'
++'<div class="fb" id="q7-fb"></div></div>'
+
++'<div class="qs" id="q8"><div class="qlbl">QUESTION 8</div>'
++'<div class="stag2">ELAGSE2RI1 — Character Traits</div>'
++'<div class="qt">What does Lily\'s action at the VERY END of the story tell us about the kind of person she is?<small>Re-read the last panel. Lily won the contest, but then she did something for Marcus. Think about what that action shows about her character and values.</small></div>'
++'<div class="choices">'+mkQ('q8',
+  ['She is proud and likes to show off her prize','She forgot she won and gave away her seeds by accident','She is kind and generous — she shared her seeds and offered to help Marcus','She did not really want to win the contest'],
+  2,
+  'Correct! Lily showed she was kind and generous by sharing her seeds and offering to try again together. Winning did not make her unkind. Her action at the end reveals her character.',
+  'Re-read the last sentence of the story. What exactly did Lily do and say after winning? Think about what it means when someone shares with you even after they beat you.')+'</div>'
++'<div class="fb" id="q8-fb"></div></div>'
+
++'<div class="qs" id="q9"><div class="qlbl">QUESTION 9</div>'
++'<div class="stag2">ELAGSE2RI2 — Main Idea of the Whole Comic</div>'
++'<div class="qt">You have now read all THREE stories in this comic. What one BIG IDEA do all three stories have in common?<small>Think about what happened in The New Kid, The Storm, and The Garden Contest. What lesson or big idea could you take from all three of them together?</small></div>'
++'<div class="choices">'+mkQ('q9',
+  ['All three stories are about the weather','Kindness, trying your best, and helping others can make good things happen','All three stories are about winning contests','School is always hard for everyone'],
+  1,
+  'Correct! All three stories show that kindness, trying your best, and helping others leads to good outcomes — Priya\'s kindness helped Jaylen, Ms. Rosa\'s kindness helped Ana, and Lily\'s consistent effort and kindness led to a beautiful sunflower and a new plan with Marcus.',
+  'Think about the lesson in each story. What did a character DO that made things better? Is there one idea that describes all three of those actions?')+'</div>'
++'<div class="fb" id="q9-fb"></div></div>'
+
+// COMPLETE
++'<div class="cbanner" id="cBanner">'
++'<h2>READING CHAMPION!</h2>'
++'<p>'+hi+' '+hn+' — you read THREE full stories and answered all nine questions! That is real reading comprehension. You found main ideas, cause and effect, character feelings, and even made an inference. Outstanding work!</p>'
++'<div class="srpt"><h4>WHAT YOU PRACTICED:</h4>'
++'<div class="sr-row">Key details — Who, What, Where, When, Why (RI1)</div>'
++'<div class="sr-row">Main idea across multiple stories (RI2)</div>'
++'<div class="sr-row">Cause and effect chains (RI3)</div>'
++'<div class="sr-row">Character feelings and traits</div>'
++'<div class="sr-row">Making inferences from story clues</div>'
++'</div>'
++'<button class="rbtn" onclick="goBack()">BACK TO THE STORE!</button>'
++'<button class="rbtn sec" onclick="toggleParent()">SHOW PARENT REPORT</button>'
++'</div>';
+}};
+</script>
+
+<div id="siteFooter" style="background:#0e0e1f;border-top:4px solid #FFE600;padding:18px 20px;text-align:center">
+  <div style="font-family:'Bangers',cursive;font-size:20px;color:#FFE600;letter-spacing:2px;text-shadow:1px 1px 0 #000;margin-bottom:6px">WORD POWER COMIC BOOK LEARNING SHOP</div>
+  <div style="font-family:'Patrick Hand',cursive;font-size:13px;color:#ccc;line-height:1.9">
+    Conceptualized &amp; Designed by <strong style="color:#FFE600">Kortisha Y. Baker</strong><br>
+    &copy; <span class="cpYr"></span> Kortisha Y. Baker. All Rights Reserved.<br>
+    <span style="font-size:11px;color:#999">This educational program and all of its content, characters, stories, lesson designs, and original artwork are the intellectual property of Kortisha Y. Baker and are protected under applicable United States copyright law. Unauthorized reproduction, redistribution, or commercial use of any part of this program without express written permission from the creator is strictly prohibited. This program is licensed for personal and classroom educational use only. Any use beyond the scope of this license requires written authorization from Kortisha Y. Baker.</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.cpYr').forEach(function(el){el.textContent=new Date().getFullYear();});
+var cpEl=document.getElementById('cpYear');if(cpEl)cpEl.textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
